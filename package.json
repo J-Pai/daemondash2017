@@ -1,0 +1,27 @@
+{
+  "name": "room_phil",
+  "version": "1.0.0",
+  "description": "TBD",
+  "main": "server.js",
+  "scripts": {
+    "test": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/J-Pai/daemondash2017.git"
+  },
+  "author": "Team Phil",
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/j-pai/room_phil#readme",
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  },
+  "dependencies": {
+    "ejs": "^2.5.5",
+    "express": "^4.14.0",
+    "mongoose": "^4.7.9",
+    "socket.io": "^1.7.2",
+    "twilio": "^2.11.1",
+    "vue": "^2.1.10"
+  }
+}
