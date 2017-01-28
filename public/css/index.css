@@ -1,0 +1,84 @@
+body {
+    background: url("/public/images/BG.png") no-repeat fixed center;
+}
+
+/*BOOTSTRAP OVERRIDE*/
+
+/*Navbar*/
+.customNavBar {
+    background-color: #900000;
+}
+
+.customNavBar .navbar-nav  > li > a {
+    color: #FFF;
+}
+
+.customNavBar .navbar-nav  > li > a:hover, 
+.customNavBar .navbar-nav > li > a:focus{
+    color: #CCC;
+}
+
+/*Buttons*/
+.customPriBtn {
+    background-color: #BA0000;
+    border-color: #BA0000;
+}
+
+.customPriBtn:hover, 
+.customPriBtn:active, 
+.customPriBtn:focus {
+    background-color: #9C0000;
+    border-color: #9C0000;
+}
+
+.customPriBtn:active:focus, 
+.customPriBtn:active:hover {
+    background-color: #7E0000;
+    border-color: #7E0000;
+}
+
+/*Font*/
+.btn, .navbar-default, 
+.navbar-default .navbar-header 
+.navbar-brand, 
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Open Sans','Helvetica Neue',Arial,sans-serif;
+}
+
+.modal-title {
+    font-family: 'Open Sans','Helvetica Neue',Arial,sans-serif;
+    font-size: 36px;    
+}
+
+/*Header and footer*/
+#header {
+    font-size: 95px;
+    text-transform: uppercase;
+    margin-top: 0;
+}
+
+#subHeader {
+    font-size: 20px;
+    color: #777;
+    text-transform: uppercase;
+    margin-top: 0;
+}
+
+.header-content {
+    position: absolute;
+    top: 50%;
+}
+
+hr {
+    border-color: #BA0000;
+    border-width: 3px;
+    max-width: 100px;
+}
+
+footer {
+    position: absolute;
+    text-align: center;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
