@@ -4,22 +4,25 @@
  */
 module.exports = function(app, passport) {
     app.get('/', function(req, res) {
-        res.render('pages/index', {
-            loginMessage: req.flash('loginMessage'),
-            signupMessage: req.flash('signupMessage')
-        });
+        if(req.isAuthenticated())
+            res.redirect('/home');
+        else res.render('pages/index', { message: req.flash('message') });
     });
     
     app.post('/signup', passport.authenticate('local-signup', {
         successRedirect: '/home',
-        failureRedirect: '/fail',
+        failureRedirect: '/',
+        failureFlash: true
+    }));
+
+    app.post('/login', passport.authenticate('local-login', {
+        successRedirect: '/home',
+        failureRedirect: '/',
         failureFlash: true
     }));
 
     app.get('/home', isLoggedIn, function(req, res) {
-        res.render('pages/home', {
-            user: req.user
-        });
+        res.render('pages/home', { user: req.user });
     });
 
     app.get('/logout', function(req,res) {

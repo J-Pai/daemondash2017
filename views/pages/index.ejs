@@ -7,6 +7,9 @@
     </head>
     <body>
         <% include ../partials/login-header %>
+        <% if (message.length > 0) { %>
+            <div class="alert alert-danger"><%= message %></div>
+        <% } %>
         <main>
             <div class="container-fluid">
                 <div class="jumbotron">
@@ -25,9 +28,7 @@
                 <div class="modal-header">
                     <h3 class="modal-title">Signing Up</h5>
                 </div>
-                <% if (signupMessage.length > 0) { %>
-                    <div class="alert alert-danger"><%= loginMessage %></div>
-                <% } %> 
+                
                 <form action="/signup" method="post">
                     <div class="modal-body">
                         <div class="form-group">
@@ -57,9 +58,7 @@
                 <div class="modal-header">
                     <h3 class="modal-title">Signing In</h5>     
                 </div>
-                <% if (loginMessage.length > 0) { %>
-                    <div class="alert alert-danger"><%= signupMessage %></div>
-                <% } %> 
+                
                 <form action="/login" method="post">
                     <div class="modal-body">
                         <div class="form-group">
