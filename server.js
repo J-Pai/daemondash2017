@@ -5,49 +5,48 @@
 
 // Dependencies
 var express = require('express');
-var http = require('http');
 var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
 
-// Helper Dependencies
-var Account = require('./helpers/account.js');
-var acc = new Account;
+// Authentication Dependencies
+var mongoose = require('mongoose');
+var passport = require('passport');
+var flash = require('connect-flash');
+
+var morgan = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var session = require('express-session');
+
+// Database Declaration/connection
+mongoose.connect('mongodb://daemondash:Mech*123@ds133249.mlab.com:33249/jpai_mongodb_main');
+mongoose.promise = global.Promise;
+
 // Server Configuration
 app.set('port', (process.env.PORT || 3000));
 app.set('view engine', 'ejs');
 app.use('/public', express.static('public'));
 
+// Authentication Configuration
+app.use(morgan('dev'));
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+// Required for passport
+app.use(session({ 
+    secret : 'kycu9r49UcvTUh5d4zF3b8TVV8IErBpx',
+    resave: true,
+    saveUninitialized: true
+})); //Session secret
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
+require('./config/passport')(passport);
+
 // Routing
-app.get('/', function(req, res) {
-    res.render('pages/index');
-});
+require('./app/routes.js')(app, passport);
 
-app.get('/home', function(req, res) {
-    res.render('pages/home');
-});
-
-// API
-app.post('/create_user', acc.create_user);
-app.post('/login', acc.login);
-
-// Page not found error
-app.get('/404', function(req,res,next) {
-    // Trigger a 404
-    next();
-});
-
-app.use(function(req, res, next) {
-    res.status(404);
-    res.render('pages/404', {url: req.url});
-    return;
-});
-
-// Socker and Web Server Initialization
-io.on('connection', function(socket) {
-    console.log('A user has connected...')
-});
-
-http.listen(app.get('port'), function() {
+app.listen(app.get('port'), function() {
     console.log("room_phil Live at Port " + app.get('port'));
 });

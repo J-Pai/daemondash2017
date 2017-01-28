@@ -9,10 +9,10 @@
         <% include ../partials/login-header %>
         <main>
             <div class="container-fluid">
-            	<div class="jumbotron">
+                <div class="jumbotron">
                 <h1 class="text-center">Info Server Main Page</h2>
                 <p class="text-center">This is the main page of the Info Server.</p>            
-            	</div>
+                </div>
             </div>
         </main>
         <% include ../partials/footer %>
@@ -20,67 +20,70 @@
     
     <!--SIGN UP MODAL-->
     <div id="myModal1" class="modal fade" role="dialog">
-    	<div class="modal-dialog" role="document">
-			<div class="modal-content">
-    			<div class="modal-header">
-    				<h3 class="modal-title">Signing Up</h5>
-    			</div>
-    		
-    			<div class="modal-body">
-    				<form>
-  						<div class="form-group">
-    						<label for="exampleInputEmail1">Email address</label>
-    						<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
-  						</div>
-  						<div class="form-group">
-    						<label for="exampleInputPassword1">Password</label>
-    						<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-  						</div>
-  					</form>
-    			</div>
-
-      			<div class="modal-footer">
-        			<button type="button" class="btn btn-primary">Sign up</button>
-        			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      			</div>				
-			</div>    		
-    	</div>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Signing Up</h5>
+                </div>
+                <% if (signupMessage.length > 0) { %>
+                    <div class="alert alert-danger"><%= loginMessage %></div>
+                <% } %> 
+                <form action="/signup" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="username1">Username</label>
+                            <input type="text" class="form-control" id="username" 
+                                name="username" placeholder="Username">
+                        </div>
+                        <div class="form-group">
+                            <label for="password1">Password</label>
+                            <input type="password" class="form-control" id="password" 
+                                name="password" placeholder="Password">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>  
+                </form>
+            </div>          
+        </div>
     </div>
 
     <!--SIGN IN MODAL-->
     <div id="myModal2" class="modal fade" role="dialog">
-    	<div class="modal-dialog" role="document">
-			<div class="modal-content">
-    			<div class="modal-header">
-    				<h3 class="modal-title">Signing In</h5>		
-    			</div>
-    		
-    			<div class="modal-body">
-    				<form>
-  						<div class="form-group">
-    						<label for="exampleInputEmail1">Email address</label>
-    						<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
-  						</div>
-  						<div class="form-group">
-    						<label for="exampleInputPassword1">Password</label>
-    						<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-  						</div>
- 						<div class="checkbox">
-    						<label>
-      						<input type="checkbox"> Remember me
-    						</label>
-  						</div>  						
-  					</form>
-    			</div>
-
-      			<div class="modal-footer">
-        			<button type="button" class="btn btn-primary">Sign in</button>
-        			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      			</div>				
-			</div>    		
-    	</div>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Signing In</h5>     
+                </div>
+                <% if (loginMessage.length > 0) { %>
+                    <div class="alert alert-danger"><%= signupMessage %></div>
+                <% } %> 
+                <form action="/login" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="username2">Username</label>
+                            <input type="text" class="form-control" id="username2" 
+                                name="username" placeholder="Username">
+                        </div>
+                        <div class="form-group">
+                            <label for="password2">Password</label>
+                            <input type="password" class="form-control" id="password2" 
+                                name="password" placeholder="Password">
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                            <input type="checkbox"> Remember me
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Sign in</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>          
+        </div>
     </div>
-
-
-
 </html>
