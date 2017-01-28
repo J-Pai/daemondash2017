@@ -4,7 +4,7 @@
  */
 
 // Setup db connection
-var mongoose = requre('mongoose');
+var mongoose = require('mongoose');
 mongoose.connect('mongodb://daemondash:Mech*123@ds133249.mlab.com:33249/jpai_mongodb_main');
 var Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;

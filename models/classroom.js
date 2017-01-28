@@ -1,5 +1,9 @@
-var mongoose = requre('mongoose');
-mongoose.connect('mongodb://daemondash:Mech*123@ds133249.mlab.com:33249/jpai_mongodb_main');
+/**
+ * classroom.js
+ * This contains the model for classrooms
+*/
+
+var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
 
@@ -21,13 +25,19 @@ var classroomSchema = new Schema({
 	locked: {
 		type: Date,
 	},
-	class: {
+	class: [{
+		department: String,
+		course: String,
+		section: String,
 		days: [String],
-		time: [String],
-	}
+		start: String,
+		end: String,
+	}],
 	reserved: {
-		days: [String],
-		time: [String].
+		days: [{
+			day: String,
+			time: String,
+		}],
 	}
 });
 var Classroom = mongoose.model('Classroom', classroomSchema);
