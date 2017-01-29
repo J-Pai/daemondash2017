@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://daemondash:Mech*123@ds133249.mlab.com:33249/jpai_mongodb_main');
 var data = require('./info.json');
 var _ = require('lodash');
-var models = require('./models');
+var models = require('./config');
 
 var User = mongoose.model("User");
 var Classroom = mongoose.model("Classroom");
