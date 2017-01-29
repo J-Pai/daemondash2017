@@ -32,13 +32,10 @@ var ClassroomSchema = new Schema({
         end: Number,
     }],
     reserved: [{
-        user: {
-            type : ObjectId,
-            ref : 'User',
-        },
+        user: String,
         day: String,
-        start: String,
-        end: String,
+        start: Number,
+        end: Number,
     }]
 });
 
@@ -52,22 +49,60 @@ ClassroomSchema.statics = _.merge(ClassroomSchema.statics, {
     */
     reserve : function(opts, cb) {
         var Classroom = this;
-        Classroom.update({
-            building : opts.building,
-            room : opts.room
-        },
-        {
-            $addToSet : {
-                reserved : {
-                    user : user,
-                    day : opts.day,
-                    time: opts.time,
-                }
+        async.waterfall([
+            function(d) {
+                var result = [];
+                opts.data.forEach(function(dat) {
+                    opts.building = dat.buildingname;
+                    opts.room = dat.room;
+                    var s_hour = parseInt(dat.time.split(':')[0]);
+                    var s_min = parseInt(dat.time.split(':')[1]);
+                    var e_hour = s_hour
+                    var e_min = s_min + 15;
+                    var start = (s_hour * 60 * 60) + (s_min * 60);
+                    if (e_min === 60) {
+                        e_hour += 1;
+                        e_min = 0;
+                    }
+                    var end = (e_hour * 60 * 60) + (e_min * 60);
+                    var obj = {
+                        user : opts.user.name,
+                        day : dat.day,
+                        start : start,
+                        end : end,
+                    }
+                    result.push(obj);
+                })
+                d(null, result);
+            },
+            function(arr, d) {
+                async.forEach(arr, function(value, c) {
+                    Classroom.update({
+                        building : opts.building,
+                        room : opts.room
+                    },
+                    {
+                        $addToSet : {
+                            reserved : {
+                                user : value.user,
+                                day : value.day,
+                                start : value.start,
+                                end : value.end
+                            }
+                        }
+                    }).exec(function(err) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        c();
+                    });
+                }, d);
             }
-        }).exec(function(err) {
+        ], function(err, result) {
+            console.log('done');
             if (err) {
                 console.log(err);
-            }
+            };
         });
     },
 
@@ -105,6 +140,15 @@ ClassroomSchema.statics = _.merge(ClassroomSchema.statics, {
             building: opts.building,
             
         })
+        collection.find({
+            "building" : building_acronym,
+            "class" : { $all : {
+                "$or" : [
+                    {"start" : { "$gt" : time }},
+                    {"end" : { "$lt" : time }},
+                ]
+            } }
+        });
     },
 
     /**Gets top 3 rooms with longest times to return as a sms

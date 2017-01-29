@@ -20,17 +20,15 @@
                         <label>
                             Search building name here: 
                         </label>
-                    <form>
-                        <div class="input-group input-group-lg search-field">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="submit" 
-                                        id="search-button">
-                                        Search
-                                </button>
-                            </span>
-                            <input id="search-field" list="building-list" type="text"        placeholder="Search here..." class="form-control">
-                        </div>
-                    </form>
+                    <div class="input-group input-group-lg search-field">
+                         <span class="input-group-btn">
+                             <button class="btn btn-default" type="button" 
+                                     id="search-button">
+                                     Search
+                             </button>
+                         </span>
+                         <input id="search-field" list="building-list" type="text"        placeholder="Search here..." class="form-control">
+                    </div>
                         <datalist id="building-list"></datalist>
                     </div>
                     <div class="well" id="calendar">
@@ -178,13 +176,13 @@
                 renderer.draw('.timetable');
                 $("span.time-entry.free").click(function(){
                     $(this).toggleClass('clicked'); 
-
                     if ($(this).attr("class").indexOf("clicked") == -1) {
                         $("#" + $(this).attr("data-id")).remove();
+                        var current = $(this);
                         _.remove(bookings, function(val) {
-                            return val === $(this).attr("data-id")
+                            return val.id === current.data('id');
                         });
-                    }else {
+                    } else {
                         var detail = document.createElement('p');
                         detail.setAttribute("id", $(this).attr("data-id"));
                         detail.innerHTML = ($(this).attr("data-buildingName") + " " + 
@@ -193,7 +191,7 @@
                         $(this).attr("data-day") + ", " +
                         $(this).attr("data-date"));
                         $("#timetable-detail").append(detail);
-                        bookings.push($(this).attr("data-id"));
+                        bookings.push($(this).data());
                     }   
 
                     if (bookings.length === 0) {
@@ -205,9 +203,9 @@
 
                 $("#cancel").click(function(){
                     $('#timetable-detail').empty();
-                    bookings.forEach(function(id) {
-                        $("#" + id).remove();
-                        $('[data-id=' + id + "]").toggleClass('clicked');
+                    bookings.forEach(function(data) {
+                        $("#" + data.id).remove();
+                        $('[data-id=' + data.id + "]").toggleClass('clicked');
                     })
                     bookings = [];
                 });
@@ -253,7 +251,7 @@
                 }
             });
             $('#confirm').click(function() {
-                console.log(bookings);
+                $.post('/reserve', {data: bookings})
             });
         </script>
     </body>

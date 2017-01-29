@@ -3,6 +3,7 @@
  * Specifies the routes in which the web application utilizes
  */
 var User = require('../app/models/user');
+var Classroom = require('../app/models/classroom');
 
 module.exports = function(app, passport) {
     // Page routing
@@ -57,6 +58,13 @@ module.exports = function(app, passport) {
             console.log(group);
         });
         res.end();
+    });
+
+    app.post('/reserve', function(req, res)  {
+        Classroom.reserve({
+            user: req.user,
+            data: req.body.data
+        });
     });
 
     app.use(function(req, res, next) {
