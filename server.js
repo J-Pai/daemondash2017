@@ -5,7 +5,10 @@
 
 // Dependencies
 var express = require('express');
+var http = require("http");
 var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
 // Authentication Dependencies
 var mongoose = require('mongoose');
@@ -36,8 +39,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(session({ 
     secret : 'kycu9r49UcvTUh5d4zF3b8TVV8IErBpx',
     resave: true,
-    saveUninitialized: true
-})); //Session secret
+    saveUninitialized: true,
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
@@ -47,6 +50,10 @@ require('./config/passport')(passport);
 // Routing
 require('./app/routes.js')(app, passport);
 
-app.listen(app.get('port'), function() {
+io.on('connection', function(socket) {
+    console.log('A user has connected...');
+})
+
+http.listen(app.get('port'), function() {
     console.log("room_phil Live at Port " + app.get('port'));
 });

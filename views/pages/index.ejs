@@ -2,122 +2,123 @@
 <!DOCTYPE html>
 
 <html lang="en" ng-app>
-        <head>
-                <% include ../partials/head %>
-                <link rel="stylesheet" href="/public/css/index.css">
-        </head>
-        <body>
-            <% include ../partials/login-header %>
-            <main class="container-fluid">
-                <div class="col-md-12 text-center header-content">
-                    <h1 id="header">ENTER YOUR TEXT HERE.</h1>
-                    <p id="subHeader">Blah blah blah blah blah.</p>
-                    <hr>
-                    <button type="button"
-                                    class="btn btn-primary navbar-btn btn-lg customPriBtn" 
-                                      data-toggle="modal" data-target="#modal1">
-                                    Sign up
-                    </button>
+    <head>
+        <% include ../partials/head %>
+        <link rel="stylesheet" href="/public/css/index.css">
+    </head>
+    <body>
+        <% include ../partials/login-header %>
+        <main class="container-fluid">
+        <% if (message) { %>
+            <div class="alert alert-danger"><%= message %></div>
+        <% } %> 
+        <div class="col-md-12 text-center header-content">
+            <h1 id="header">ENTER YOUR TEXT HERE.</h1>
+            <p id="subHeader">Blah blah blah blah blah.</p>
+            <hr>
+            <button type="button"
+                    class="btn btn-primary navbar-btn btn-lg customPriBtn" 
+                    data-toggle="modal" data-target="#modal1">
+                    Sign up
+            </button>
 
-                    <button type="button" class="btn btn-default navbar-btn btn-lg"
-                                    data-toggle="modal" data-target="#modal2">
-                                    Sign in
-                    </button>
+            <button type="button" class="btn btn-default navbar-btn btn-lg"
+                    data-toggle="modal" data-target="#modal2">
+                    Sign in
+            </button>
+            </div>
+        </main>
+        <% include ../partials/footer %>
+    </body>
+    
+    <!--SIGN UP MODAL-->
+    <div id="modal1" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!--Modal title-->
+                <div class="modal-header">
+                    <h3 class="modal-title">Hello {{yourName}}</h5>
                 </div>
-            </main>
-            <% include ../partials/footer %>
-        </body>
-        
-        <!--SIGN UP MODAL-->
-        <div id="modal1" class="modal fade" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <!--Modal title-->
-                    <div class="modal-header">
-                        <h3 class="modal-title">Hello {{yourName}}</h5>
-                    </div>
-                    
-                    <!--Modal body-->
-                    <div class="modal-body">
-                        <form action="/signup" method="post">
-                            <div class="form-group">
-                                <label for="exampleInputPhone1">Phone number</label>
-                                <input type="text" class="form-control" name="username"
-                                             id="exampleInputPhone1" placeholder="Phone number">
-                            </div>
+          
+                <!--Modal body-->
+                <div class="modal-body">
+                    <form action="/signup" method="post">
+                        <div class="form-group">
+                            <label for="exampleInputPhone1">Phone number</label>
+                            <input type="text" class="form-control" name="phonenumber"
+                                    id="exampleInputPhone1" placeholder="Phone number">
+                        </div>
 
-                            <div class="form-group">
-                                <label for="exampleInputName">Name</label>
-                                <input type="text" class="form-control" name="name"
-                                             id="exampleInputName" placeholder="Name"
-                                             ng-model="yourName">
-                            </div>
+                        <div class="form-group">
+                            <label for="exampleInputName">Name</label>
+                            <input type="text" class="form-control" name="name"
+                                    id="exampleInputName" placeholder="Name"
+                                    ng-model="yourName">
+                        </div>
                      
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Password</label>
-                                <input type="password" class="form-control" name="password"
-                                             id="exampleInputPassword1" placeholder="Password">
-                            </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" class="form-control" name="password"
+                                    id="exampleInputPassword1" placeholder="Password">
+                        </div>
+
                         <!--Modal footer-->
                         <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary customPriBtn">
-                                        Sign up
-                                </button>
-                                <button type="button" class="btn btn-secondary" 
-                                        data-dismiss="modal">
-                                        Close
-                        </button>
+                            <button type="submit" class="btn btn-primary customPriBtn">
+                                    Sign up
+                            </button>
+                            <button type="button" class="btn btn-secondary" 
+                                    data-dismiss="modal">
+                                    Close
+                            </button>
                         </div>
-                     </form>
-                    </div>
-
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!--SIGN IN MODAL-->
-        <div id="modal2" class="modal fade" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <!--Modal title-->
-                    <div class="modal-header">
-                        <h3 class="modal-title">Welcome Back</h5>   
-                    </div>
-                    
-                    <!--Modal body-->
-                    <div class="modal-body">
-                        <form action="/login" method="post">
-                            <div class="form-group">
-                                <label for="exampleInputPhone2">Phone number</label>
-                                <input type="text" class="form-control" name="username" 
-                                             id="exampleInputPhone2" placeholder="Phone number">
-                            </div>
+    <!--SIGN IN MODAL-->
+    <div id="modal2" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!--Modal title-->
+                <div class="modal-header">
+                    <h3 class="modal-title">Welcome Back</h5>   
+                </div>
+          
+                <!--Modal body-->
+                <div class="modal-body">
+                    <form action="/login" method="post">
+                        <div class="form-group">
+                            <label for="exampleInputPhone2">Phone number</label>
+                            <input type="text" class="form-control" name="phonenumber" 
+                                    id="exampleInputPhone2" placeholder="Phone number">
+                        </div>
 
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Password</label>
-                                <input type="password" class="form-control" name="password" 
-                                             id="exampleInputPassword1" placeholder="Password">
-                            </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" class="form-control" name="password" 
+                                    id="exampleInputPassword1" placeholder="Password">
+                        </div>
 
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> Remember me
-                                </label>
-                            </div>
-                     <!--Modal footer-->
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary customPriBtn">
-                                        Sign in
-                        </button>
-                        <button type="button" class="btn btn-secondary" 
-                                        data-dismiss="modal">
-                                        Close
-                        </button>
-                    </div>
-                     </form>
-                    </div>
-
+                        <div class="checkbox">
+                            <label><input type="checkbox"> Remember me</label>
+                        </div>
+                     
+                        <!--Modal footer-->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary customPriBtn">
+                                    Sign in
+                            </button>
+                            <button type="button" class="btn btn-secondary" 
+                                    data-dismiss="modal">
+                                    Close
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
 </html>

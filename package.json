@@ -17,6 +17,9 @@
     "nodemon": "^1.11.0"
   },
   "dependencies": {
+    "async": "^2.1.4",
+    "ejs": "^2.5.5",
+    "express": "^4.14.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.16.0",
     "connect-flash": "^0.1.1",
