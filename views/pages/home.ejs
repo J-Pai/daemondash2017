@@ -15,7 +15,7 @@
         <% include ../partials/header %>
         <main>
             <div class="row vertical-aligned">
-                <div class="col-md-3">
+                <div class="col-md-12">
                     <div class="well">
                         <label>
                             Search building name here: 
@@ -31,9 +31,6 @@
                         </div>
                         <datalist id="building-list"></datalist>
                     </div>
-                </div>
-
-                <div class="col-md-9">
                     <div class="well">
                         <div class="text-center">
                             <h1 class="customTitle" id="timetable-title"></h1>
@@ -88,7 +85,7 @@
                         free[key] = 0;
                         b_min += 5;
                     }
-                    console.log(free);
+
                     room.class.forEach(function(lecture) {
                         if (lecture.days.indexOf(day) !== -1) {
                             var date = new Date(null);
@@ -118,7 +115,7 @@
                                 delete free[key];
                                 s_minute += 5
                             }
-                            timetable.addEvent(lecture.department + lecture.course, room.room, start, end);
+                            timetable.addEvent(lecture.department + lecture.course, room.room, start, end, options1);
                         }
                     });
                     _.forEach(free, function(value, key) {
@@ -177,17 +174,6 @@
                 }
             }
 
-            var options4 = {
-                url: '#',
-                class: 'free',
-                data: {
-                    room: 'Room 2',
-                    date: '2015/7/18',
-                    time: '11:00am - 11:20am',
-                    id: 11001120,
-                }
-            } 
-
             var options3 = {
                 class: 'taken',
                 data: {
@@ -204,7 +190,7 @@
                 $("#booking-detail").hide();
             })
             //Select and de-select
-            $(".time-entry.free").click(function(){
+            $("span.time-entery.free").click(function(){
                 $(this).toggleClass('clicked');
 
                 if ($(this).attr("class").indexOf("clicked") == -1) {

@@ -25,7 +25,6 @@
     width: 25%;
     padding: 0!important;
     margin-top: 46px;
-    overflow-x: scroll;
     border-right: 5px solid transparent
 
 }
@@ -56,7 +55,6 @@
 .timetable section {
     width: 75%;
     padding: 0!important;
-
     -webkit-overflow-scrolling: touch
 }
 .timetable section time {
