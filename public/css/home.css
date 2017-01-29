@@ -148,3 +148,6 @@ footer {
     font-size: 175px;
     padding-left: 50px;
 }
+#booking-detail {
+    overflow: scroll;
+}
