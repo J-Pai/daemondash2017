@@ -10,10 +10,19 @@ var Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
 
 var userSchema = new Schema({
+    name: String,
     local : {
-        username: String, 
+        phonenumber: String, 
         password: String
-    }
+    },
+    meta: {
+        verified: Boolean,
+        code: String
+    },
+    reservations: [{
+        room: String,
+        building: String
+    }]
 });
 
 userSchema.methods.generateHash = function(password) {

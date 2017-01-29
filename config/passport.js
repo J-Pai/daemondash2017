@@ -16,44 +16,49 @@ module.exports = function(passport) {
         })
     });
 
-    passport.use('local-signup', new LocalStrategy(
-        function(username,password,done) {
-            username = username.toLowerCase();
-            process.nextTick(function() {
-                User.findOne({
-                    'local.username': username
-                }, function (err, user) {
-                    if (err) return done(err);
-                    if (user) {
-                        console.log('Username exists...');
-                        return done(null, false, { message: 'That username is already taken.'});
-                    } else if (isNaN(username)) {
-                        console.log('Username is NOT a valid phonenumber');
-                        return done(null, false, { message: 'That username is not a valid phone number' });
-                    } else if (username.length !== 10){
-                        console.log('Username is NOT a valid phonenumber');
-                        return done(null, false, { message: 'That username is not a valid phone number' });
-                    }else {
-                        console.log('Creating new user...');
-                        var newUser = new User();
+    passport.use('local-signup', new LocalStrategy({
+            usernameField: 'phonenumber',
+            passwordField: 'password',
+            passReqToCallback: true
+        },
+        function(req,phonenumber,password,done) {
+            User.findOne({
+                'local.phonenumber': phonenumber
+            }, function (err, user) {
+                var pattern = /^\+\d \(\d{3}\) \d{3}-\d{4}$/;
+                var match = pattern.exec(phonenumber);
+                console.log(match);
+                if (err) return done(err);
+                if (user) {
+                    console.log('Username exists...');
+                    return done(null, false, { message: 'That username is already taken.'});
+                } else if (!match){
+                    console.log('Phonenumber is NOT a valid phonenumber');
+                    return done(null, false, { message: 'Phone number is invalid.' });
+                }else {
+                    console.log('Creating new user...');
+                    var newUser = new User();
 
-                        newUser.local.username = username;
-                        newUser.local.password = newUser.generateHash(password);
+                    newUser.local.phonenumber = phonenumber;
+                    newUser.local.password = newUser.generateHash(password);
+                    newUser.name = req.body.name;
 
-                        newUser.save(function(err) {
-                            if (err) return done(err);
-                            return done(null, newUser);
-                        });
-                    }
-                });
+                    newUser.save(function(err) {
+                        if (err) return done(err);
+                        return done(null, newUser);
+                    });
+                }
             });
         }));
 
-    passport.use('local-login', new LocalStrategy(
-        function(username,password,done) {
-            username = username.toLowerCase();
+    passport.use('local-login', new LocalStrategy({
+            usernameField: 'phonenumber',
+            passwordField: 'password'
+        },
+        function(phonenumber,password,done) {
+            phonenumber = phonenumber.toLowerCase();
             User.findOne({
-                'local.username' : username
+                'local.phonenumber' : phonenumber
             }, function(err, user) {
                 if (err) {
                     return done(err);

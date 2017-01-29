@@ -4,14 +4,74 @@
 <html lang="en">
     <head>
         <% include ../partials/head %>
+        <link rel="stylesheet" href="/public/css/home.css">
+        <link rel="stylesheet" href="/public/css/custTimetable.css">        
+        <link rel="stylesheet" href="/public/timetable.js-master/dist/styles/timetablejs.css">
+        <script src="/public/timetable.js-master/dist/scripts/timetable.min.js"></script>
     </head>
-    <body class="container">
+    <body class="container-fluid">
         <% include ../partials/header %>
         <main>
-            <div class="jumbotron">
-            
+            <div class="row vertical-aligned">
+                <div class="col-md-3">
+                    <div class="jumbotron search-box">
+                        
+                    </div>
+                </div>
+
+                <div class="col-md-9">
+                    <div class="jumbotron">
+                        <div class="text-center">
+                            <h1 id="timetable-title">Building name</h1>
+                        </div>
+                        <div class="timetable"></div>
+                    </div>
+                    <div class="jumbotron">
+                        
+                    </div>
+                </div>
             </div>
         </main>
         <% include ../partials/footer %>
+        <script>
+            var timetable = new Timetable();
+            timetable.addLocations (['Room 1', 'Room 2', 'Room 3']);
+
+            var options1 = {
+                class: 'class',
+                data: {
+                    id: 4,
+                }
+            }
+
+            var options2 = {
+                url: '#',
+                class: 'free',
+                data: {
+                    id: 3,
+                }
+            }
+
+            var options3 = {
+                class: 'taken',
+                data: {
+                    id: 4,
+                }
+            }
+
+            timetable.addEvent('Class', 'Room 1', 
+                new Date(2015,7,17,10,45), new Date(2015,7,17,12,30), options1);
+            timetable.addEvent('', 'Room 2', 
+                new Date(2015,7,17,10,45), new Date(2015,7,17,11,00), options2);
+            timetable.addEvent('', 'Room 3', 
+                new Date(2015,7,17,10,45), new Date(2015,7,17,12,30), options3); 
+
+            var renderer = new Timetable.Renderer(timetable);
+                renderer.draw('.timetable');
+
+            $(".time-entry.free").click(function(){
+                $(this).toggleClass('clicked');
+            });   
+        </script>
     </body>
 </html>
