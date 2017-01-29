@@ -5,7 +5,6 @@
 
 // Setup db connection
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://daemondash:Mech*123@ds133249.mlab.com:33249/jpai_mongodb_main');
 var Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
 
@@ -24,15 +23,18 @@ var userSchema = new Schema({
         type: String, required: true
     },
     meta: {
-        verified: boolean,
+        verified: Boolean,
         phone: String,
         code: String
     },
-    reservations: [String],
+    reservations: [{
+        room : String,
+        building: String,
+    }],
     created_at: Date,
     updated_at: Date
 });
 
-var User = moongoose.model('User', userSchema);
+var User = mongoose.model('User', userSchema);
 
 module.exports = User;

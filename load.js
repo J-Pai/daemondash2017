@@ -2,7 +2,9 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://daemondash:Mech*123@ds133249.mlab.com:33249/jpai_mongodb_main');
 var data = require('./info.json');
 var _ = require('lodash');
-var models = require('./models/classroom');
+var models = require('./models');
+
+var User = mongoose.model("User");
 var Classroom = mongoose.model("Classroom");
 
 var days = {
@@ -48,15 +50,19 @@ _.forEach(data, function(value, key) {
                         room: loc.room,
                     }, 
                     {
-                        $addToSet: { 
+                        $push: { 
                             class: {
                                 department: dept,
                                 course: course,
                                 section: section,
-                                day: new_days,
+                                days: new_days,
                                 start: loc.start_time,
                                 end: loc.end_time,
                             }
+                        }
+                    }).exec(function(err) {
+                        if (err) {
+                            console.log(err);
                         }
                     });
                 } else {
