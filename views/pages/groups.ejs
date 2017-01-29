@@ -1,3 +1,6 @@
+<!-- views/pages/groups.ejs -->
+<!DOCTYPE html>
+
 <html lang="en">
     <head>
         <% include ../partials/head%>
@@ -17,7 +20,9 @@
                             <h3 class="customTitleNoPad">Current Groups</h3>
                         </div>
                         <div class="panel-body  scrollPanel">
-                            <button type="button" class="list-group-item noRadius">Group 1</button>
+                            <% for (let i = 0; i < groups.length; i++) { %>
+                                <button type="button" class="list-group-item noRadius">Group <%= i %></button>
+                            <% } %>
                         </div>
                     </div>
                 </div>
@@ -32,14 +37,16 @@
                                     <label for="creator">Creator</label>
                                     <div class="panel panel-default">
                                         <div class="panel-body">
-                                            Name
+                                            <%= groups[0].creator %>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="members">Members</label>
                                     <select multiple class="form-control" id="members" size=8>
-                                         <option>1</option>
+                                        <% for (let i = 0; i < groups[0].members.length; i++) { %>
+                                            <option><%= groups[0].members[i] %></option>
+                                        <% } %>
                                     </select>
                                 </div>
                                 <div class="row">
@@ -51,7 +58,9 @@
                                 <div class="form-group" style="margin-top: 15px">
                                     <label for="reservation">Reservations</label>
                                     <select multiple class="form-control" id="members" size=4>
-                                         <option>1</option>
+                                        <% for (let i = 0; i < groups[0].reservations.length; i++) { %>
+                                            <option><%= groups[0].reservations[i] %></option>
+                                        <% } %>
                                     </select>
                                 </div>
                                 <div class="row">
@@ -69,6 +78,7 @@
                             <h3 class="customTitleNoPad">Pending Invitations</h3>
                         </div>
                         <div class="panel-body scrollPanel">
+                            <div class="alert alert-warning" role="alert">Invitation from +1 (202) 120-1232</div>
                         </div>
                     </div>
                 </div>

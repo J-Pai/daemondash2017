@@ -7,7 +7,7 @@ var group = require('/home/jpai/Documents/daemondash2017/app/models/group.js');
 //    if (err) throw err;
 //    console.log(group);
 //});
-group.join({groupId: 0, phonenumber: '+1 (123) 123-1244'}, function(err,group) {
+group.createGroup({creator: '+1 (123) 456-7890'}, function(err,group) {
     if (err) throw err;
     console.log(group);
 });

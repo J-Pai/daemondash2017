@@ -14,10 +14,7 @@ var groupSchema = new Schema({
         type: Number,
         required: true
     },
-    creator: {
-        type: Number,
-        required: true
-    }, 
+    creator: String, 
     members: [String],
     invitations: [String],
     reservations: [{
