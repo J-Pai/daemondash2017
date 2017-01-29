@@ -88,7 +88,6 @@
                         free[key] = 0;
                         b_min += 5;
                     }
-                    console.log(free);
                     room.class.forEach(function(lecture) {
                         if (lecture.days.indexOf(day) !== -1) {
                             var date = new Date(null);
@@ -137,8 +136,6 @@
                             }
                             var nstart = new Date(2017,1,29,hour, minute);
                             var nend = new Date(2017,1,29,nhour, nminute);
-                            console.log(nstart);
-                            console.log(nend);
                             timetable.addEvent("", room.room, nstart, nend, options2);
                         }
 
@@ -146,6 +143,27 @@
                 });
                 var renderer = new Timetable.Renderer(timetable);
                 renderer.draw('.timetable');
+                $("span.time-entry.free").click(function(){
+                    $(this).toggleClass('clicked'); 
+
+                    if ($(this).attr("class").indexOf("clicked") == -1) {
+                        $("#" + $(this).attr("data-id")).remove();
+                        numOfBooking--;
+                    }else {
+                        var detail = document.createElement('p');
+                        detail.setAttribute("id", $(this).attr("data-id"));
+                        detail.innerHTML = ($(this).attr("data-room") + " " + 
+                        $(this).attr("data-date"));
+                        $("#timetable-detail").append(detail);
+                        numOfBooking++;
+                    }   
+
+                    if (numOfBooking == 0) {
+                        $("#booking-detail").hide();                    
+                    }else {
+                        $("#booking-detail").show();
+                    }
+                }); 
             });
             //timetable.addLocations(['1','2','3']);
             $.getJSON("/public/json/buildings.json", function(data) {
@@ -163,17 +181,6 @@
                 class: 'class',
                 data: {
 
-                }
-            }
-
-            var options2 = {
-                url: '#',
-                class: 'free',
-                data: {
-                    room: 'Room 2',
-                    date: '2015/7/17',
-                    time: '10:45am - 11:00am',
-                    id: 10451100,
                 }
             }
 
@@ -203,28 +210,6 @@
             $(function(){
                 $("#booking-detail").hide();
             })
-            //Select and de-select
-            $(".time-entry.free").click(function(){
-                $(this).toggleClass('clicked');
-
-                if ($(this).attr("class").indexOf("clicked") == -1) {
-                    $("#" + $(this).attr("data-id")).remove();
-                    numOfBooking--;
-                }else {
-                    var detail = document.createElement('p');
-                    detail.setAttribute("id", $(this).attr("data-id"));
-                    detail.innerHTML = ($(this).attr("data-room") + " " + 
-                    $(this).attr("data-date"));
-                    $("#timetable-detail").append(detail);
-                    numOfBooking++;
-                }
-
-                if (numOfBooking == 0) {
-                    $("#booking-detail").hide();                    
-                }else {
-                    $("#booking-detail").show();
-                }
-            });  
 
             //Search button
             $("#search-button").click(function(){
