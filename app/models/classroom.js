@@ -109,8 +109,13 @@ ClassroomSchema.statics = _.merge(ClassroomSchema.statics, {
             building: opts.building,
             
         })
-    }
+    },
 
+    getClassrooms : function(opts, cb) {
+        Classroom.find({
+            building: opts.building
+        }).sort('room').exec(cb);
+    }
 });
 
 var Classroom = mongoose.model('Classroom', ClassroomSchema);
