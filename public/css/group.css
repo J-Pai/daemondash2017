@@ -1,14 +1,21 @@
 .customPanel {
-	height: 650px;
+    height: 650px;
 }
 
 .scrollPanel {
-	overflow-y: scroll;
-}	
+    overflow-y: scroll;
+}   
 
 .list-group-item.noRadius {
-	border-top-left-radius: 0px;
-	border-top-right-radius: 0px;
-	border-bottom-left-radius: 0px;
-	border-bottom-right-radius: 0px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.custBut {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left:85%
 }
