@@ -134,8 +134,6 @@
                             }
                             var nstart = new Date(2017,1,29,hour, minute);
                             var nend = new Date(2017,1,29,nhour, nminute);
-                            console.log(nstart);
-                            console.log(nend);
                             timetable.addEvent("", room.room, nstart, nend, options2);
                         }
 
@@ -143,6 +141,27 @@
                 });
                 var renderer = new Timetable.Renderer(timetable);
                 renderer.draw('.timetable');
+                $("span.time-entry.free").click(function(){
+                    $(this).toggleClass('clicked'); 
+
+                    if ($(this).attr("class").indexOf("clicked") == -1) {
+                        $("#" + $(this).attr("data-id")).remove();
+                        numOfBooking--;
+                    }else {
+                        var detail = document.createElement('p');
+                        detail.setAttribute("id", $(this).attr("data-id"));
+                        detail.innerHTML = ($(this).attr("data-room") + " " + 
+                        $(this).attr("data-date"));
+                        $("#timetable-detail").append(detail);
+                        numOfBooking++;
+                    }   
+
+                    if (numOfBooking == 0) {
+                        $("#booking-detail").hide();                    
+                    }else {
+                        $("#booking-detail").show();
+                    }
+                }); 
             });
             //timetable.addLocations(['1','2','3']);
             $.getJSON("/public/json/buildings.json", function(data) {
@@ -164,6 +183,7 @@
             }
 
             var options2 = {
+
                 url: '#',
                 class: 'free',
                 data: {
@@ -189,28 +209,6 @@
             $(function(){
                 $("#booking-detail").hide();
             })
-            //Select and de-select
-            $("span.time-entery.free").click(function(){
-                $(this).toggleClass('clicked');
-
-                if ($(this).attr("class").indexOf("clicked") == -1) {
-                    $("#" + $(this).attr("data-id")).remove();
-                    numOfBooking--;
-                }else {
-                    var detail = document.createElement('p');
-                    detail.setAttribute("id", $(this).attr("data-id"));
-                    detail.innerHTML = ($(this).attr("data-room") + " " + 
-                    $(this).attr("data-date"));
-                    $("#timetable-detail").append(detail);
-                    numOfBooking++;
-                }
-
-                if (numOfBooking == 0) {
-                    $("#booking-detail").hide();                    
-                }else {
-                    $("#booking-detail").show();
-                }
-            });  
 
             //Search button
             $("#search-button").click(function(){
