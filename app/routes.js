@@ -38,9 +38,12 @@ module.exports = function(app, passport) {
     app.get('/link', function(req, res) {
         res.render('pages/link');
     });
-
     app.get('/reservations', function(req, res) {
-        console.log(req);
+        function convert(num) {
+            var date = new Date(null);
+            date.setSeconds(num);
+            return date.toISOString().substr(11, 5);
+        }
         Classroom.find({
             reserved : {
                 $elemMatch : {
@@ -48,7 +51,7 @@ module.exports = function(app, passport) {
                 }
             }
         }, function(err, result) {
-            res.render('pages/reservations', { user : req.user.local.phonenumber, classrooms : result });
+            res.render('pages/reservations', { user : req.user.local.phonenumber, classrooms : result, change: convert});
         });
     });
 

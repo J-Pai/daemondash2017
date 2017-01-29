@@ -5,35 +5,48 @@
     <head>
         <% include ../partials/head %>
         <link rel="stylesheet" href="/public/css/index.css">
+        <script src="/socket.io/socket.io.js"></script>
     </head>
     <body class="container-fluid">
         <% include ../partials/header %>
         <main>
             <div style:"overflow: scroll" class="well">
-            <table class="table table-striped">
-                <thead>
-                        <tr>
-                            <th>Building</th>
-                            <th>Room</th>
-                            <th>Time</th>
-                            <th>Day</th>
-                        </tr>
-                </thead>
-                <tbody>
-                    <% for (let i = 0; i < classrooms.length; i++) { %>
-                        <% for (let j = 0; j < classrooms[i].reserved.length; j++) { %>
+                <table class="table table-striped">
+                    <thead>
                             <tr>
-                                <td width="50em"><%=classrooms[i].building %></td>
-                                <td width="300em"><%= classrooms[i].room %></td>
-                                <td><%= classrooms[i].reserved[j].start + "-" +classrooms[i].reserved[j].end %></td>
-                                <td><%= classrooms[i].reserved[j].day %></td>
+                                <th>Building</th>
+                                <th>Room</th>
+                                <th>Time</th>
+                                <th>Day</th>
                             </tr>
+                    </thead>
+                    <tbody>
+                        <% for (let i = 0; i < classrooms.length; i++) { %>
+                            <% for (let j = 0; j < classrooms[i].reserved.length; j++) { %>
+                                <tr>
+                                    <td width="50em"><%=classrooms[i].building %></td>
+                                    <td width="300em"><%= classrooms[i].room %></td>
+                                    <td><%= change(classrooms[i].reserved[j].start) + "-" +change(classrooms[i].reserved[j].end) %></td>
+                                    <td><%= classrooms[i].reserved[j].day %></td>
+                                </tr>
+                            <% } %>
                         <% } %>
-                    <% } %>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+                    <button type="button"
+                            class="btn btn-defaut navbar-btn btn-lg customSecBtn"
+                            id="cancel" data-id=<%=user.replace(/\W+/g,"")%>>
+                            Clear All
+                    </button>
             </div>
         </main>
+        <script>
+            var io = io();
+            $('#cancel').click(function() {
+                io.emit('clear all', $(this).data('id'));
+                location.reload();
+            });
+        </script>
         <% include ../partials/footer %>
     </body>
 </html>

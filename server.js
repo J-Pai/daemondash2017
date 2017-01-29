@@ -58,9 +58,30 @@ io.on('connection', function(socket) {
     socket.on('get building', function(building) {
     	Classroom.getClassrooms({building: building}, function(err, rooms) {
     		io.emit('set rooms', rooms);
-    	})
-    })
-})
+    	});
+    });
+    socket.on('clear all', function(id) {
+    	var str = id.toString();
+    	str = "+" + str[0] + " (" + str.substring(1,4) + ") " + str.substring(4,7) + "-" + str.substring(7);
+    	console.log(str);
+    	Classroom.update({
+    		reserved : {
+    			$elemMatch: {
+    				user: str
+    			}
+    		}
+    	},
+    		{ $pull : { 
+    			reserved : { user : str }
+    		}
+    	},{multi: true}).exec(function(err) {
+    		if (err) {
+    			console.log(err);
+    		}
+    		console.log('done');
+    	});
+    });
+});
 
 http.listen(app.get('port'), function() {
     console.log("room_phil Live at Port " + app.get('port'));
