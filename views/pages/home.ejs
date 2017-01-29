@@ -15,19 +15,43 @@
             <div class="row vertical-aligned">
                 <div class="col-md-3">
                     <div class="jumbotron search-box">
-                        
+                        <label for="search-field">
+                            Search building name here: 
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" 
+                                    id="search-button">
+                                    Go!
+                                    </button>
+                                </span>
+                                <input id="search-field" list="building-list" type="text"        placeholder="Search here..." class="form-control">
+                            </div>
+
+                            <datalist id="building-list">
+                                <option value="Something"></option>
+                                <option value="Something Else"></option>
+                                <option value="Another One"></option>
+                                <option value="Alpha"></option>
+                                <option value="Bravo"></option>
+                                <option value="Charlie"></option>
+                                <option value="Delta"></option>
+                                <option value="Echo"></option>
+                                <option value="Foxtrot"></option>
+                                <option value="Gamma"></option>
+                            </datalist>
+                        </label>
                     </div>
                 </div>
 
                 <div class="col-md-9">
                     <div class="jumbotron">
                         <div class="text-center">
-                            <h1 id="timetable-title">Building name</h1>
+                            <h1 class="customTitle" id="timetable-title"></h1>
                         </div>
                         <div class="timetable"></div>
                     </div>
-                    <div class="jumbotron">
-                        
+                    <div class="jumbotron"> 
+                        <h2 class="customTitle">Booking details</h2>
                     </div>
                 </div>
             </div>
@@ -71,7 +95,19 @@
 
             $(".time-entry.free").click(function(){
                 $(this).toggleClass('clicked');
-            });   
+            });  
+
+            $("#search-button").click(function(){
+                var inputVal = $("#search-field").val();
+                console.log(inputVal);
+                var obj = $("#building-list").find("option[value='"+inputVal+"']");
+
+                if(obj !=null && obj.length>0)
+                    $("#timetable-title").text(inputVal);
+                else
+                    alert("Invalid choice"); 
+            })
         </script>
+        <script src="/public/scripts/homeScript.js"></script>
     </body>
 </html>
