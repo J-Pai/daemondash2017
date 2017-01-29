@@ -28,8 +28,8 @@ var ClassroomSchema = new Schema({
         course: String,
         section: String,
         days: [String],
-        start: String,
-        end: String,
+        start: Number,
+        end: Number,
     }],
     reserved: [{
         user: {
@@ -37,7 +37,8 @@ var ClassroomSchema = new Schema({
             ref : 'User',
         },
         day: String,
-        time: String,
+        start: String,
+        end: String,
     }]
 });
 

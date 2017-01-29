@@ -15,42 +15,50 @@
         <% include ../partials/header %>
         <main>
             <div class="row vertical-aligned">
-                <div class="col-md-3">
-                    <div class="well search-box">
-                        <label for="search-field">
-                            Search building name here: 
-                            <div class="input-group input-group-lg">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" 
-                                    id="search-button">
-                                    Go!
-                                    </button>
-                                </span>
-                                <input id="search-field" list="building-list" type="text"        placeholder="Search here..." class="form-control">
-                            </div>
-
-                            <datalist id="building-list">
-                            </datalist>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="col-md-9">
+                <div class="col-md-12">
                     <div class="well">
+                        <label>
+                            Search building name here: 
+                        </label>
+                    <form>
+                        <div class="input-group input-group-lg search-field">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit" 
+                                        id="search-button">
+                                        Search
+                                </button>
+                            </span>
+                            <input id="search-field" list="building-list" type="text"        placeholder="Search here..." class="form-control">
+                        </div>
+                    </form>
+                        <datalist id="building-list"></datalist>
+                    </div>
+                    <div class="well" id="calendar">
                         <div class="text-center">
                             <h1 class="customTitle" id="timetable-title"></h1>
                         </div>
-                        <div class="timetable"></div>
+                        <div class="timetable pre-scrollable"></div>
                     </div>
-                    <div class="well"> 
-                        <h2 class="customTitle">Booking details</h2>
-                        <p id="timetable-detail"></p>
+                    <div class="well" id="booking-detail"> 
+                        <h1 class="customTitle">Booking details</h1>
+                        <div id="timetable-detail"></div>
+                        <button type="button"
+                                class="btn btn-primary navbar-btn btn-lg customPriBtn">
+                                Confirm
+                        </button>
+                        <button type="button"
+                                class="btn btn-defaut navbar-btn btn-lg customSecBtn"
+                                id="cancel-button">
+                                Cancel
+                        </button>
                     </div>
                 </div>
             </div>
         </main>
         <% include ../partials/footer %>
         <script>
+            //Populate .json into datalist
+
             var io = io();
             var options = [];
             var days = {
@@ -62,17 +70,19 @@
                 5 : "Saturday",
                 6 : "Sunday"
             };
-            
             io.on('set rooms', function(rooms) {
                 var timetable = new Timetable();
                 timetable.setScope(7,22);
                 var date = new Date();
                 var day = days[date.getDay()];
                 var room_nums = [];
+                //get a list of rooms
                 rooms.forEach(function(room) {
                     room_nums.push(room.room);
                 });
                 timetable.addLocations(room_nums);
+
+                //creates all the time slots;
                 rooms.forEach(function(room) {
                     var total = (22-7) * 12;
                     var b_hour = 7;
@@ -88,7 +98,7 @@
                         free[key] = 0;
                         b_min += 5;
                     }
-                    console.log(free);
+
                     room.class.forEach(function(lecture) {
                         if (lecture.days.indexOf(day) !== -1) {
                             var date = new Date(null);
@@ -96,6 +106,9 @@
                             var d = date.toISOString().substr(11, 8).split(':');
                             var s_minute = d[1];
                             var s_hour = d[0];
+                            var options1 = {
+                                class: 'class',
+                            }
 
                             date = new Date(null);
                             date.setSeconds(lecture.end);
@@ -118,17 +131,35 @@
                                 delete free[key];
                                 s_minute += 5
                             }
-                            timetable.addEvent(lecture.department + lecture.course, room.room, start, end);
+                            timetable.addEvent(lecture.department + lecture.course, room.room, start, end, options1);
                         }
                     });
+
                     _.forEach(free, function(value, key) {
                         var minute = parseInt(key.split(':')[1]);
+                        var hour = parseInt(key.split(':')[0]);
                         var plus = key.split(':')[0] + ":" + (minute+15).toString();
+                        var newMinute;
+
+                        if (minute == 0) {
+                            newMinute = minute + '0';
+                        }else {
+                            newMinute = minute;
+                        }
+
                         if (minute % 15 === 0) {
                             var options2 = {
                                 class: 'free',
+                                data: {
+                                    buildingName: room.building,
+                                    room: room.room,
+                                    date: 'January 29, 2017',
+                                    time: hour + ":" + newMinute,
+                                    day: day,
+                                    id: hour + "" + minute + "" + nhour + "" + nminute,
+                                }
                             }
-                            var hour = parseInt(key.split(':')[0]);
+
                             var nhour = hour;
                             var nminute = minute + 15;
                             if (nminute === 60) {
@@ -137,8 +168,6 @@
                             }
                             var nstart = new Date(2017,1,29,hour, minute);
                             var nend = new Date(2017,1,29,nhour, nminute);
-                            console.log(nstart);
-                            console.log(nend);
                             timetable.addEvent("", room.room, nstart, nend, options2);
                         }
 
@@ -146,6 +175,34 @@
                 });
                 var renderer = new Timetable.Renderer(timetable);
                 renderer.draw('.timetable');
+                $("span.time-entry.free").click(function(){
+                    $(this).toggleClass('clicked'); 
+
+                    if ($(this).attr("class").indexOf("clicked") == -1) {
+                        $("#" + $(this).attr("data-id")).remove();
+                        numOfBooking--;
+                    }else {
+                        var detail = document.createElement('p');
+                        detail.setAttribute("id", $(this).attr("data-id"));
+                        detail.innerHTML = ($(this).attr("data-buildingName") + " " + 
+                        $(this).attr("data-room") + ", " +
+                        $(this).attr("data-time") + ", " +
+                        $(this).attr("data-day") + ", " +
+                        $(this).attr("data-date"));
+                        $("#timetable-detail").append(detail);
+                        numOfBooking++;
+                    }   
+
+                    if (numOfBooking == 0) {
+                        $("#booking-detail").hide();                    
+                    }else {
+                        $("#booking-detail").show();
+                    }
+                });
+
+                $("#cancel-button").click(function(){
+
+                });
             });
             //timetable.addLocations(['1','2','3']);
             $.getJSON("/public/json/buildings.json", function(data) {
@@ -159,57 +216,35 @@
                 }
             });
 
-            var options1 = {
-                class: 'class',
-                data: {
-                    id: 4,
-                }
-            }
-
-            var options2 = {
-                url: '#',
-                class: 'free',
-                data: {
-                    id: 3,
-                }
-            }
-
             var options3 = {
                 class: 'taken',
                 data: {
-                    id: 4,
                 }
             }
+            //Hide booking detail
+            var numOfBooking = 0;
+            $(function(){
+                $("#booking-detail").hide();
+            })
+            $(function(){
+                $("#calendar").hide();
+            })
 
-            // timetable.addEvent('Class', '1', 
-            //     new Date(2015,7,17,10,45), new Date(2015,7,17,12,30), options1);
-            // timetable.addEvent('', '2', 
-            //     new Date(2015,7,17,10,45), new Date(2015,7,17,11,00), options2);
-            // timetable.addEvent('', '3', 
-            //     new Date(2015,7,17,10,45), new Date(2015,7,17,12,30), options3); 
-
-            // var renderer = new Timetable.Renderer(timetable);
-            //     renderer.draw('.timetable');
-
-            $(".time-entry.free").click(function(){
-                $(this).toggleClass('clicked');
-            });  
-
+            //Search button
             $("#search-button").click(function(){
                 var inputVal = $("#search-field").val();
-                console.log(inputVal);
-                var obj = $("#building-list").find("option[value='"+inputVal+"']");
+                var obj = $("#building-list").find("option[value='"+inputVal+"']"); 
 
                 if(obj !=null && obj.length>0) {
                     var code = inputVal.split(' ')[0].slice(1,-1)
                     $("#timetable-title").text(inputVal); 
                     io.emit("get building", code);
+                    $("#calendar").show();
                 }
                 else {
                     alert("Invalid choice"); 
                 }
             })
         </script>
-        <script src="/public/scripts/homeScript.js"></script>
     </body>
 </html>

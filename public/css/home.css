@@ -1,5 +1,7 @@
 /*BOOTSTRAP OVERRIDE*/
-
+html {
+    overflow-y: hidden;
+}
 /*Navbar*/
 .customNavBar {
     background-color: #900000;
@@ -34,6 +36,24 @@
 .customPriBtn:active:hover {
     background-color: #7E0000;
     border-color: #7E0000;
+}
+
+.customSecBtn {
+    background-color: #FFF;
+    border-color: #FFF;    
+}
+
+.customSecBtn:hover, 
+.customSecBtn:active, 
+.customSecBtn:focus {
+    background-color: #CCC;
+    border-color: #CCC;
+}
+
+.customSecBtn:active:focus, 
+.customSecBtn:active:hover {
+    background-color: #DDD;
+    border-color: #DDD;
 }
 
 /*Font*/
@@ -87,13 +107,32 @@ footer {
 }
 
 .vertical-aligned {
-    min-height: 100%;  
+    min-height: 100px;  
     min-height: 90vh;
     display: flex;
     align-items: center;
     padding: 0 50px;
 }
 
-#timetable-title {
-    margin-top: 0px;
+.customTitle {
+    padding: 10px 0 20px 0;
+    color: #900000;
+    font-weight: bold;
+}
+
+#timetable-detail {
+    font-size: 30px;
+}
+
+.calendar {
+    overflow: auto;
+}
+
+footer {
+    position: relative;
+    text-align: center;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
 }

@@ -1,26 +1,33 @@
 .timetable .time-entry.class,
 .timetable .time-entry.class:hover {
-	background-color: #CCC;
-	border: none;
+    background-color: #CCC;
+    border: 1px solid #FFF;
 }
 
 .timetable .time-entry.free {
-	background-color: #22B14C;
-	border: none;
+    background-color: #22B14C;
+    border: 1px solid #FFF;
 }
 .timetable .time-entry.free:hover {
-	background-color: #008418;
-	border: none;
+    background-color: #008418;
+    border: 1px solid #FFF;
 }
 
 .timetable .time-entry.taken,
 .timetable .time-entry.taken:hover {
-	background-color: #DF003C;
-	border: none;
+    background-color: #DF003C;
+    border: 1px solid #FFF;
 }
 
 .timetable .time-entry.clicked, 
 .timetable .time-entry.clicked:hover {
-	background-color: #F59F16;
-	border: none;
+    background-color: #F59F16;
+    border: 1px solid #FFF;
+}
+
+.timetable aside .row-heading {
+    float: right;
+    font-size: 125%;
+    font-weight: bold;
+    color: #555;
 }
