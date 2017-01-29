@@ -4,6 +4,7 @@
 */
 
 var mongoose = require('mongoose');
+var async = require('async');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 var _ = require('lodash');
@@ -74,6 +75,7 @@ ClassroomSchema.statics = _.merge(ClassroomSchema.statics, {
 			}
 		});
 	},
+
 	/**Removes reservation for a room
 	 * @param {Object} opts - Parameters for the room to remove reservation from 
 	 * @param {String} opts.user - user to remove from reservation
@@ -96,6 +98,19 @@ ClassroomSchema.statics = _.merge(ClassroomSchema.statics, {
 			}
 		});
 	}
+
+	/**Gets top 3 rooms with longest times to return as a sms
+	 * @param {Object} opts - Parameters for this function 
+	 * @param {String} opts.building - building that you want to view rooms in
+	 * @param {String} opts.time - current time
+	*/
+	getTop : function(opts, cb) {
+		Classroom.find({
+			building: opts.building,
+			
+		})
+	}
+
 });
 
 var Classroom = mongoose.model('Classroom', ClassroomSchema);

@@ -5,6 +5,7 @@
 
 // Setup db connection
 var mongoose = require('mongoose');
+var async = require('async');
 var Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
 
