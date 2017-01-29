@@ -4,13 +4,14 @@
 <html lang="en">
     <head>
         <% include ../partials/head %>
+        <link rel="stylesheet" href="/public/css/index.css">
     </head>
-    <body class="container">
+    <body class="container-fluid">
         <% include ../partials/error-header %>
         <main>
-            <div class="jumbotron">
-                <h1>Error 404</h1>
-                <p>Page does not exist.</p>
+            <div class="col-md-12 text-center header-content">
+                <h1 id="error">Error 404</h1>
+                <p id="subHeader">Page does not exist.</p>
             </div>
         </main>
         <% include ../partials/footer %>

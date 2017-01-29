@@ -20,15 +20,17 @@
                         <label>
                             Search building name here: 
                         </label>
+                    <form>
                         <div class="input-group input-group-lg search-field">
                             <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" 
+                                <button class="btn btn-default" type="submit" 
                                         id="search-button">
-                                        Go!
+                                        Search
                                 </button>
                             </span>
                             <input id="search-field" list="building-list" type="text"        placeholder="Search here..." class="form-control">
                         </div>
+                    </form>
                         <datalist id="building-list"></datalist>
                     </div>
                     <div class="well" id="calendar">
@@ -232,13 +234,13 @@
             //Search button
             $("#search-button").click(function(){
                 var inputVal = $("#search-field").val();
-                var obj = $("#building-list").find("option[value='"+inputVal+"']");
-                $("#calendar").show();
+                var obj = $("#building-list").find("option[value='"+inputVal+"']"); 
 
                 if(obj !=null && obj.length>0) {
                     var code = inputVal.split(' ')[0].slice(1,-1)
                     $("#timetable-title").text(inputVal); 
                     io.emit("get building", code);
+                    $("#calendar").show();
                 }
                 else {
                     alert("Invalid choice"); 

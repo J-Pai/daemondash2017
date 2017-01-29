@@ -38,6 +38,24 @@ html {
     border-color: #7E0000;
 }
 
+.customSecBtn {
+    background-color: #FFF;
+    border-color: #FFF;    
+}
+
+.customSecBtn:hover, 
+.customSecBtn:active, 
+.customSecBtn:focus {
+    background-color: #CCC;
+    border-color: #CCC;
+}
+
+.customSecBtn:active:focus, 
+.customSecBtn:active:hover {
+    background-color: #DDD;
+    border-color: #DDD;
+}
+
 /*Font*/
 .btn, .navbar-default, 
 .navbar-default .navbar-header 
@@ -97,7 +115,9 @@ footer {
 }
 
 .customTitle {
-    margin-top: 0px;
+    padding: 10px 0 20px 0;
+    color: #900000;
+    font-weight: bold;
 }
 
 #timetable-detail {

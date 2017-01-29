@@ -30,7 +30,7 @@
 }
 .timetable aside li {
     padding: 0 15px;
-    background-color: #EFEFEF;
+    background-color: #DEDEDE;
     line-height: 46px
 }
 .timetable aside li:not(:last-of-type) {
@@ -73,7 +73,7 @@
 }
 .timetable section header li {
     display: inline-block;
-    font-size: 2rem;
+    font-size: 1.5rem;
     overflow: visible;
     width: 0;
     line-height: 46px;
