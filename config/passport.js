@@ -25,10 +25,16 @@ module.exports = function(passport) {
                 }, function (err, user) {
                     if (err) return done(err);
                     if (user) {
-                        console.log('Username exists...')
+                        console.log('Username exists...');
                         return done(null, false, { message: 'That username is already taken.'});
-                    } else {
-                        console.log('Creating new user...')
+                    } else if (isNaN(username)) {
+                        console.log('Username is NOT a valid phonenumber');
+                        return done(null, false, { message: 'That username is not a valid phone number' });
+                    } else if (username.length !== 10){
+                        console.log('Username is NOT a valid phonenumber');
+                        return done(null, false, { message: 'That username is not a valid phone number' });
+                    }else {
+                        console.log('Creating new user...');
                         var newUser = new User();
 
                         newUser.local.username = username;
