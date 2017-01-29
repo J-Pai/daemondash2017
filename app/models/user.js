@@ -7,6 +7,8 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 var Schema = mongoose.Schema;
+var ObjectId = Schema.ObjectId;
+var Group = mongoose.model('Group');
 mongoose.Promise = global.Promise;
 
 var userSchema = new Schema({
@@ -22,6 +24,24 @@ var userSchema = new Schema({
     reservations: [{
         room: String,
         building: String
+    }],
+    messages: [{
+        from: String,
+        body: String,
+        time_received: Date
+    }],
+    sent_messages: [{
+        from: String,
+        body: String,
+        time_received: Date
+    }],
+    friends: [{
+        type: ObjectId,
+        ref: 'User'
+    }],
+    groups: [{
+        type: ObjectId,
+        ref: 'Group'
     }]
 });
 
