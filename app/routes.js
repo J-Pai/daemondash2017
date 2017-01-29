@@ -33,6 +33,10 @@ module.exports = function(app, passport) {
             res.render('pages/groups', { user: req.user, groups: ext_groups });
         });
     });
+    
+    app.get('/link', function(req, res) {
+        res.render('pages/link');
+    })
 
     app.get('/logout', function(req,res) {
         req.logout();
