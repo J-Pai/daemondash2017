@@ -51,6 +51,11 @@ groupSchema.statics = _.merge(groupSchema.statics, {
             newGroup.save(cb);
         });
     },
+    deleteGroup: function(opts, cb) {
+        Group.findOne({
+            groupId: opts.groupId
+        }).remove(cb);
+    },
     invite: function(opts, cb) {
         Group.findOne({
             groupId: opts.groupId
