@@ -31,7 +31,7 @@
                         </div>
                         <datalist id="building-list"></datalist>
                     </div>
-                    <div class="well">
+                    <div class="well" id="calendar">
                         <div class="text-center">
                             <h1 class="customTitle" id="timetable-title"></h1>
                         </div>
@@ -40,6 +40,15 @@
                     <div class="well" id="booking-detail"> 
                         <h1 class="customTitle">Booking details</h1>
                         <div id="timetable-detail"></div>
+                        <button type="button"
+                                class="btn btn-primary navbar-btn btn-lg customPriBtn">
+                                Confirm
+                        </button>
+                        <button type="button"
+                                class="btn btn-defaut navbar-btn btn-lg customSecBtn"
+                                id="cancel-button">
+                                Cancel
+                        </button>
                     </div>
                 </div>
             </div>
@@ -95,6 +104,9 @@
                             var d = date.toISOString().substr(11, 8).split(':');
                             var s_minute = d[1];
                             var s_hour = d[0];
+                            var options1 = {
+                                class: 'class',
+                            }
 
                             date = new Date(null);
                             date.setSeconds(lecture.end);
@@ -125,13 +137,23 @@
                         var minute = parseInt(key.split(':')[1]);
                         var hour = parseInt(key.split(':')[0]);
                         var plus = key.split(':')[0] + ":" + (minute+15).toString();
+                        var newMinute;
+
+                        if (minute == 0) {
+                            newMinute = minute + '0';
+                        }else {
+                            newMinute = minute;
+                        }
+
                         if (minute % 15 === 0) {
                             var options2 = {
                                 class: 'free',
                                 data: {
+                                    buildingName: room.building,
                                     room: room.room,
                                     date: 'January 29, 2017',
-                                    time: hour + ":" + minute,
+                                    time: hour + ":" + newMinute,
+                                    day: day,
                                     id: hour + "" + minute + "" + nhour + "" + nminute,
                                 }
                             }
@@ -160,8 +182,10 @@
                     }else {
                         var detail = document.createElement('p');
                         detail.setAttribute("id", $(this).attr("data-id"));
-                        detail.innerHTML = ($(this).attr("data-room") + " " + 
+                        detail.innerHTML = ($(this).attr("data-buildingName") + " " + 
+                        $(this).attr("data-room") + ", " +
                         $(this).attr("data-time") + ", " +
+                        $(this).attr("data-day") + ", " +
                         $(this).attr("data-date"));
                         $("#timetable-detail").append(detail);
                         numOfBooking++;
@@ -172,7 +196,11 @@
                     }else {
                         $("#booking-detail").show();
                     }
-                }); 
+                });
+
+                $("#cancel-button").click(function(){
+
+                });
             });
             //timetable.addLocations(['1','2','3']);
             $.getJSON("/public/json/buildings.json", function(data) {
@@ -186,16 +214,25 @@
                 }
             });
 
+            var options3 = {
+                class: 'taken',
+                data: {
+                }
+            }
             //Hide booking detail
             var numOfBooking = 0;
             $(function(){
                 $("#booking-detail").hide();
+            })
+            $(function(){
+                $("#calendar").hide();
             })
 
             //Search button
             $("#search-button").click(function(){
                 var inputVal = $("#search-field").val();
                 var obj = $("#building-list").find("option[value='"+inputVal+"']");
+                $("#calendar").show();
 
                 if(obj !=null && obj.length>0) {
                     var code = inputVal.split(' ')[0].slice(1,-1)
