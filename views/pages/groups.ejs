@@ -2,27 +2,29 @@
     <head>
         <% include ../partials/head%>
         <link rel="stylesheet" href="/public/css/home.css">
+        <link rel="stylesheet" href="/public/css/group.css">
     </head>
     <body class>
         <% include ../partials/header %>
         <div class="container-fluid">
+            <div>
+                <h1 class="pageTitle">Group Reservation</h1>
+            </div>
             <div class="row vertical-aligned">
                 <div class="col-md-4">
-                    <div class="panel panel-default">
+                    <div class="panel panel-default customPanel">
                         <div class="panel-heading">
-                            <h3>Current Groups</h3>
+                            <h3 class="customTitleNoPad">Current Groups</h3>
                         </div>
-                        <div class="panel-body">
-                            <button type="button" class="list-group-item">Group 1</button>
-                            <button type="button" class="list-group-item">Group 2</button>
-                            <button type="button" class="list-group-item">Group 3</button>
+                        <div class="panel-body  scrollPanel">
+                            <button type="button" class="list-group-item noRadius">Group 1</button>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="panel panel-default">
+                    <div class="panel panel-default customPanel">
                         <div class="panel-heading">
-                            <h3>Group # Information</h3>
+                            <h3 class="customTitleNoPad">Group # Information</h3>
                         </div>
                         <div class="panel-body">
                             <form> 
@@ -62,11 +64,11 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="panel panel-default">
+                    <div class="panel panel-default customPanel">
                         <div class="panel-heading">
-                            <h3>Pending Invitations</h3>
+                            <h3 class="customTitleNoPad">Pending Invitations</h3>
                         </div>
-                        <div class="panel-body">
+                        <div class="panel-body scrollPanel">
                         </div>
                     </div>
                 </div>

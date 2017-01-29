@@ -14,23 +14,26 @@
     <body class="container-fluid">
         <% include ../partials/header %>
         <main>
+            <div>
+                <h1 class="pageTitle">Find room</h1>
+            </div>
             <div class="row vertical-aligned">
                 <div class="col-md-12">
                     <div class="well">
                         <label>
                             Search building name here: 
                         </label>
-                    <form>
+
                         <div class="input-group input-group-lg search-field">
                             <span class="input-group-btn">
-                                <button class="btn btn-default" type="submit" 
+                                <button class="btn btn-default" type="button" 
                                         id="search-button">
                                         Search
                                 </button>
                             </span>
                             <input id="search-field" list="building-list" type="text"        placeholder="Search here..." class="form-control">
                         </div>
-                    </form>
+
                         <datalist id="building-list"></datalist>
                     </div>
                     <div class="well" id="calendar">
@@ -240,6 +243,7 @@
                     $("#timetable-title").text(inputVal); 
                     io.emit("get building", code);
                     $("#calendar").show();
+                    $(".pageTitle").hide();
                 }
                 else {
                     alert("Invalid choice"); 
