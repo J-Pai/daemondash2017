@@ -248,6 +248,7 @@
 
                 $("#cancel").click(function(){
                     $('#timetable-detail').empty();
+                    $('#booking-detail').hide();
                     bookings.forEach(function(data) {
                         $("#" + data.id).remove();
                         $('[data-id=' + data.id + "]").toggleClass('clicked');

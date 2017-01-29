@@ -1,6 +1,6 @@
 body {
     background: url("/public/images/BG.png") no-repeat center fixed;
-    overflow: hidden;
+    overflow: auto;
 }
 
 /*BOOTSTRAP OVERRIDE*/
@@ -87,7 +87,7 @@ hr {
 }
 
 footer {
-    position: absolute;
+    position: relative;
     text-align: center;
     right: 0;
     bottom: 0;
