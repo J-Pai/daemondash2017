@@ -37,12 +37,25 @@ module.exports = function(app, passport) {
     
     app.get('/link', function(req, res) {
         res.render('pages/link');
-    })
+    });
+
+    app.get('/reservations', function(req, res) {
+        console.log(req);
+        Classroom.find({
+            reserved : {
+                $elemMatch : {
+                    user : req.user.local.phonenumber
+                }
+            }
+        }, function(err, result) {
+            res.render('pages/reservations', { user : req.user.local.phonenumber, classrooms : result });
+        });
+    });
 
     app.get('/logout', function(req,res) {
         req.logout();
         res.redirect('/')
-    })
+    });
     // Page not found error
     app.get('/404', function(req,res,next) {
         // Trigger a 404

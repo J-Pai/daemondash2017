@@ -64,6 +64,14 @@
             var io = io();
             var options = [];
             var bookings = [];
+            var options1 = {
+                class: 'class',
+            }
+            var options3 = {
+                class: 'taken',
+                data: {
+                }
+            };
             var days = {
                 0 : "Monday",
                 1 : "Tuesday",
@@ -137,7 +145,37 @@
                             timetable.addEvent(lecture.department + lecture.course, room.room, start, end, options1);
                         }
                     });
-
+                    _.forEach(room.reserved, function(value, key) {
+                        if (day === value.day) {                            
+                            var date = new Date(null);
+                            date.setSeconds(value.start);
+                            var d = date.toISOString().substr(11, 8).split(':');
+                            var s_minute = d[1];
+                            var s_hour = d[0];
+                            date = new Date(null);
+                            date.setSeconds(value.end);
+                            d = date.toISOString().substr(11, 8).split(':');
+                            var e_minute = d[1];
+                            var e_hour = d[0];
+                            var start = new Date(2017,1,29,s_hour,s_minute);
+                            var end = new Date(2017,1,29,e_hour,e_minute);
+                            var diff = (((end - start)/1000)/60)/5;
+                            s_minute = parseInt(s_minute);
+                            s_hour = parseInt(s_hour);
+                            for (var i = 0; i < diff; i++) {
+                                if (s_minute === 60) {
+                                    s_minute = 0;
+                                    s_hour += 1;
+                                }
+                                var ns_minute = parseInt(s_minute).toString();
+                                var ns_hour = parseInt(s_hour).toString();
+                                var key = ns_hour + ":" + ns_minute;
+                                delete free[key];
+                                s_minute += 5
+                            }
+                            timetable.addEvent(null, room.room, start, end, options3);
+                        }
+                    });
                     _.forEach(free, function(value, key) {
                         var minute = parseInt(key.split(':')[1]);
                         var hour = parseInt(key.split(':')[0]);
@@ -178,34 +216,39 @@
                 var renderer = new Timetable.Renderer(timetable);
                 renderer.draw('.timetable');
                 $("span.time-entry.free").click(function(){
-                    $(this).toggleClass('clicked'); 
-                    if ($(this).attr("class").indexOf("clicked") == -1) {
-                        $("#" + $(this).attr("data-id")).remove();
-                        var current = $(this);
-                        _.remove(bookings, function(val) {
-                            return val.id === current.data('id');
-                        });
-                    } else {
-                        var detail = document.createElement('p');
-                        detail.setAttribute("id", $(this).attr("data-id"));
-                        detail.innerHTML = ($(this).attr("data-buildingName") + " " + 
-                        $(this).attr("data-room") + ", " +
-                        $(this).attr("data-time") + ", " +
-                        $(this).attr("data-day") + ", " +
-                        $(this).attr("data-date"));
-                        $("#timetable-detail").append(detail);
-                        bookings.push($(this).data());
-                    }   
+                    if (bookings.length < 8 ) {
+                        $(this).toggleClass('clicked'); 
+                        if ($(this).attr("class").indexOf("clicked") == -1) {
+                            $("#" + $(this).attr("data-id")).remove();
+                            var current = $(this);
+                            _.remove(bookings, function(val) {
+                                return val.id === current.data('id');
+                            });
+                        } else {
+                            var detail = document.createElement('p');
+                            detail.setAttribute("id", $(this).attr("data-id"));
+                            detail.innerHTML = ($(this).attr("data-buildingName") + " " + 
+                            $(this).attr("data-room") + ", " +
+                            $(this).attr("data-time") + ", " +
+                            $(this).attr("data-day") + ", " +
+                            $(this).attr("data-date"));
+                            $("#timetable-detail").append(detail);
+                            bookings.push($(this).data());
+                        }       
 
-                    if (bookings.length === 0) {
-                        $("#booking-detail").hide();                    
-                    }else {
-                        $("#booking-detail").show();
+                        if (bookings.length === 0) {
+                            $("#booking-detail").hide();                    
+                        }else {
+                            $("#booking-detail").show();
+                        }
+                    } else {
+                        alert("You can only book 8 times slots at a time! Don't be greedy");
                     }
                 });
 
                 $("#cancel").click(function(){
                     $('#timetable-detail').empty();
+                    $('#booking-detail').hide();
                     bookings.forEach(function(data) {
                         $("#" + data.id).remove();
                         $('[data-id=' + data.id + "]").toggleClass('clicked');
@@ -225,11 +268,6 @@
                 }
             });
 
-            var options3 = {
-                class: 'taken',
-                data: {
-                }
-            }
             //Hide booking detail
             $(function(){
                 $("#booking-detail").hide();
@@ -255,7 +293,16 @@
                 }
             });
             $('#confirm').click(function() {
+                $('#timetable-detail').empty();
                 $.post('/reserve', {data: bookings})
+                bookings.forEach(function(data) {
+                    $('[data-id=' + data.id + "]").toggleClass('clicked');
+                    $('[data-id=' + data.id + "]").removeClass('free');
+                    $('[data-id=' + data.id + "]").unbind("click");
+                    $('[data-id=' + data.id + "]").addClass('taken');
+                })
+                bookings = [];
+                $('#booking-detail').hide();
             });
         </script>
     </body>

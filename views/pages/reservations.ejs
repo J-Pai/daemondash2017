@@ -1,0 +1,39 @@
+<!-- views/pages/reservations.ejs -->
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <% include ../partials/head %>
+        <link rel="stylesheet" href="/public/css/index.css">
+    </head>
+    <body class="container-fluid">
+        <% include ../partials/header %>
+        <main>
+            <div style:"overflow: scroll" class="well">
+            <table class="table table-striped">
+                <thead>
+                        <tr>
+                            <th>Building</th>
+                            <th>Room</th>
+                            <th>Time</th>
+                            <th>Day</th>
+                        </tr>
+                </thead>
+                <tbody>
+                    <% for (let i = 0; i < classrooms.length; i++) { %>
+                        <% for (let j = 0; j < classrooms[i].reserved.length; j++) { %>
+                            <tr>
+                                <td width="50em"><%=classrooms[i].building %></td>
+                                <td width="300em"><%= classrooms[i].room %></td>
+                                <td><%= classrooms[i].reserved[j].start + "-" +classrooms[i].reserved[j].end %></td>
+                                <td><%= classrooms[i].reserved[j].day %></td>
+                            </tr>
+                        <% } %>
+                    <% } %>
+                </tbody>
+            </table>
+            </div>
+        </main>
+        <% include ../partials/footer %>
+    </body>
+</html>
