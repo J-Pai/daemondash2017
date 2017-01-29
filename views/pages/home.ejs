@@ -28,16 +28,6 @@
                             </div>
 
                             <datalist id="building-list">
-                                <option value="Something"></option>
-                                <option value="Something Else"></option>
-                                <option value="Another One"></option>
-                                <option value="Alpha"></option>
-                                <option value="Bravo"></option>
-                                <option value="Charlie"></option>
-                                <option value="Delta"></option>
-                                <option value="Echo"></option>
-                                <option value="Foxtrot"></option>
-                                <option value="Gamma"></option>
                             </datalist>
                         </label>
                     </div>
@@ -59,6 +49,12 @@
         </main>
         <% include ../partials/footer %>
         <script>
+            var options = ['1','2','3','4'];
+            for (var i = 0; i < options.length; i++) {
+                var option = document.createElement('option');
+                option.value = options[i];
+                $('#building-list').append(option);
+            }
             var timetable = new Timetable();
             timetable.addLocations (['Room 1', 'Room 2', 'Room 3']);
 
