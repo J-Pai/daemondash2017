@@ -1,5 +1,7 @@
 /*BOOTSTRAP OVERRIDE*/
-
+html {
+    overflow-y: hidden;
+}
 /*Navbar*/
 .customNavBar {
     background-color: #900000;
@@ -87,13 +89,30 @@ footer {
 }
 
 .vertical-aligned {
-    min-height: 100%;  
+    min-height: 100px;  
     min-height: 90vh;
     display: flex;
     align-items: center;
     padding: 0 50px;
 }
 
-#timetable-title {
+.customTitle {
     margin-top: 0px;
+}
+
+#timetable-detail {
+    font-size: 30px;
+}
+
+.calendar {
+    overflow: auto;
+}
+
+footer {
+    position: relative;
+    text-align: center;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
 }

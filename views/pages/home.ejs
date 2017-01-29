@@ -14,22 +14,20 @@
         <main>
             <div class="row vertical-aligned">
                 <div class="col-md-3">
-                    <div class="well search-box">
-                        <label for="search-field">
+                    <div class="well">
+                        <label>
                             Search building name here: 
-                            <div class="input-group input-group-lg">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" 
-                                    id="search-button">
-                                    Go!
-                                    </button>
-                                </span>
-                                <input id="search-field" list="building-list" type="text"        placeholder="Search here..." class="form-control">
-                            </div>
-
-                            <datalist id="building-list">
-                            </datalist>
                         </label>
+                        <div class="input-group input-group-lg search-field">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" 
+                                        id="search-button">
+                                        Go!
+                                </button>
+                            </span>
+                            <input id="search-field" list="building-list" type="text"        placeholder="Search here..." class="form-control">
+                        </div>
+                        <datalist id="building-list"></datalist>
                     </div>
                 </div>
 
@@ -38,17 +36,18 @@
                         <div class="text-center">
                             <h1 class="customTitle" id="timetable-title"></h1>
                         </div>
-                        <div class="timetable"></div>
+                        <div class="timetable pre-scrollable"></div>
                     </div>
-                    <div class="well"> 
+                    <div class="well" id="booking-detail"> 
                         <h2 class="customTitle">Booking details</h2>
-                        <p id="timetable-detail"></p>
+                        <div id="timetable-detail"></div>
                     </div>
                 </div>
             </div>
         </main>
         <% include ../partials/footer %>
         <script>
+            //Populate .json into datalist
             var options = [];
             $.getJSON("/public/json/buildings.json", function(data) {
                 Object.keys(data).forEach(function(building) {
@@ -60,13 +59,16 @@
                     $('#building-list').append(option);
                 }
             });
+
+            //New timetable
             var timetable = new Timetable();
-            timetable.addLocations (['Room 1', 'Room 2', 'Room 3']);
+            timetable.setScope(0, 23);
+            timetable.addLocations (['Room 1', 'Room 2', 'Room 3', 'Room 4', 'Room 5', 'Room 6', 'Room 7', 'Room 8', 'Room 9', 'Room 10', 'Room 11', 'Room 12', 'Room 13', 'Room 23', 'Room 33', 'Room 43', 'Room 53', 'Room 63', 'Room 73', 'Room 83', 'Room 31', 'Room 32', 'Room 35', 'Room 34', 'Room 36', 'Room 37', 'Room 38', 'Room 39', 'Room 389']);
 
             var options1 = {
                 class: 'class',
                 data: {
-                    id: 4,
+
                 }
             }
 
@@ -74,9 +76,23 @@
                 url: '#',
                 class: 'free',
                 data: {
-                    id: 3,
+                    room: 'Room 2',
+                    date: '2015/7/17',
+                    time: '10:45am - 11:00am',
+                    id: 10451100,
                 }
             }
+
+            var options4 = {
+                url: '#',
+                class: 'free',
+                data: {
+                    room: 'Room 2',
+                    date: '2015/7/18',
+                    time: '11:00am - 11:20am',
+                    id: 11001120,
+                }
+            } 
 
             var options3 = {
                 class: 'taken',
@@ -89,27 +105,52 @@
                 new Date(2015,7,17,10,45), new Date(2015,7,17,12,30), options1);
             timetable.addEvent('', 'Room 2', 
                 new Date(2015,7,17,10,45), new Date(2015,7,17,11,00), options2);
+            timetable.addEvent('', 'Room 2', 
+                new Date(2015,7,17,11,00), new Date(2015,7,17,11,15), options4);
             timetable.addEvent('', 'Room 3', 
                 new Date(2015,7,17,10,45), new Date(2015,7,17,12,30), options3); 
 
             var renderer = new Timetable.Renderer(timetable);
                 renderer.draw('.timetable');
 
+            //Hide booking detail
+            var numOfBooking = 0;
+            $(function(){
+                $("#booking-detail").hide();
+            })
+            //Select and de-select
             $(".time-entry.free").click(function(){
                 $(this).toggleClass('clicked');
+
+                if ($(this).attr("class").indexOf("clicked") == -1) {
+                    $("#" + $(this).attr("data-id")).remove();
+                    numOfBooking--;
+                }else {
+                    var detail = document.createElement('p');
+                    detail.setAttribute("id", $(this).attr("data-id"));
+                    detail.innerHTML = ($(this).attr("data-room") + " " + 
+                    $(this).attr("data-date"));
+                    $("#timetable-detail").append(detail);
+                    numOfBooking++;
+                }
+
+                if (numOfBooking == 0) {
+                    $("#booking-detail").hide();                    
+                }else {
+                    $("#booking-detail").show();
+                }
             });  
 
+            //Search button
             $("#search-button").click(function(){
                 var inputVal = $("#search-field").val();
-                console.log(inputVal);
                 var obj = $("#building-list").find("option[value='"+inputVal+"']");
 
-                if(obj !=null && obj.length>0)
+                if(obj != null && obj.length > 0)
                     $("#timetable-title").text(inputVal);
                 else
                     alert("Invalid choice"); 
             })
         </script>
-        <script src="/public/scripts/homeScript.js"></script>
     </body>
 </html>
