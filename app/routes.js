@@ -3,6 +3,7 @@
  * Specifies the routes in which the web application utilizes
  */
 var User = require('../app/models/user');
+var Group = require('../app/models/group');
 
 module.exports = function(app, passport) {
     // Page routing
@@ -23,7 +24,14 @@ module.exports = function(app, passport) {
     });
 
     app.get('/groups', isLoggedIn, function(req, res) {
-        res.render('pages/groups', { user: req.user })
+        var ext_groups = null;
+        Group.getUserGroups({'phonenumber': req.user.local.phonenumber}, function (err,groups){
+            if (err) throw err;
+            if (groups) {
+                ext_groups = groups;
+            }
+            res.render('pages/groups', { user: req.user, groups: ext_groups });
+        });
     });
 
     app.get('/logout', function(req,res) {
@@ -52,7 +60,7 @@ module.exports = function(app, passport) {
     }));
     
     app.post('/createGroup', function(req, res) {
-        createGroup({phonenumber: req.user}, function(err,group) {
+        Group.createGroup({phonenumber: req.user}, function(err,group) {
             if (err) throw err;
             console.log(group);
         });
