@@ -30,6 +30,6 @@ for course in j:
 						  "building" : meeting['building'],
 						  "room" : meeting['room']
 					 }]
-target = open("info.json", 'w')
+target = open("courses.json", 'w')
 courses = json.dumps(courses)
 target.write(courses)
