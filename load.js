@@ -16,6 +16,14 @@ var days = {
     "Sa": "Saturday",
     "Su": "Sunday",
 };
+
+//converts time to seconds since 00:00:00
+//time is a string
+function convert_time(time) {
+    var time = time.substr(0, time.length-2);
+    var ampm = time.substr('-2');
+}
+
 _.forEach(data, function(value, key) {
     var split = key.split('-');
     var dept = split[0].substr(0,4);
@@ -25,7 +33,8 @@ _.forEach(data, function(value, key) {
         var new_days = [];
         var end = 0;
         var start = 0;
-        if (loc.days && loc.days !== "TBA" && loc.building && loc.room) {
+        if (loc.days && loc.days !== "TBA" && loc.building && loc.room && loc.start_time && loc.end_time) {
+            //convert 'MWF' to [Monday, Wednesday, Friday]
             while (end < loc.days.length) {
                 var sub = loc.days.substr(start, (end - start) + 1);
                 if (sub in days) {
@@ -40,6 +49,7 @@ _.forEach(data, function(value, key) {
                 end++;
                 start = end;
             }
+
             Classroom.find({
                 building: loc.building,
                 room: loc.room,
