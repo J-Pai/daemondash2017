@@ -6,6 +6,10 @@
         <% include ../partials/head%>
         <link rel="stylesheet" href="/public/css/home.css">
         <link rel="stylesheet" href="/public/css/group.css">
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io();
+        </script>
     </head>
     <body class>
         <% include ../partials/header %>
@@ -21,7 +25,7 @@
                         </div>
                         <div class="panel-body  scrollPanel">
                             <% for (let i = 0; i < groups.length; i++) { %>
-                                <button type="button" class="list-group-item noRadius">Group <%= i %></button>
+                            <button type="button" class="list-group-item noRadius groupCheck" id="group_<%= i %>" >Group <%= i %></button>
                             <% } %>
                         </div>
                     </div>
@@ -29,15 +33,14 @@
                 <div class="col-md-4">
                     <div class="panel panel-default customPanel">
                         <div class="panel-heading">
-                            <h3 class="customTitleNoPad">Group # Information</h3>
+                            <h3 class="customTitleNoPad" id="groupTitle">Group # Information</h3>
                         </div>
                         <div class="panel-body">
                             <form> 
                                 <div class="form-group">
                                     <label for="creator">Creator</label>
                                     <div class="panel panel-default">
-                                        <div class="panel-body">
-                                            <%= groups[0].creator %>
+                                        <div class="panel-body" id="creator">
                                         </div>
                                     </div>
                                 </div>
@@ -45,7 +48,6 @@
                                     <label for="members">Members</label>
                                     <select multiple class="form-control" id="members" size=8>
                                         <% for (let i = 0; i < groups[0].members.length; i++) { %>
-                                            <option><%= groups[0].members[i] %></option>
                                         <% } %>
                                     </select>
                                 </div>
@@ -57,10 +59,7 @@
                                 </div>
                                 <div class="form-group" style="margin-top: 15px">
                                     <label for="reservation">Reservations</label>
-                                    <select multiple class="form-control" id="members" size=4>
-                                        <% for (let i = 0; i < groups[0].reservations.length; i++) { %>
-                                            <option><%= groups[0].reservations[i] %></option>
-                                        <% } %>
+                                    <select multiple class="form-control" id="reservations" size=4>
                                     </select>
                                 </div>
                                 <div class="row">
@@ -103,6 +102,28 @@
         <% include ../partials/footer %>
     </body>
     <script>
+        $(".groupCheck").click(function(data) {
+            socket.emit('group select', data.target.id);
+        });
+
+        socket.on('change data', function(msg) {
+            $('#groupTitle').replaceWith('<h3 class="customTitleNoPad" id="groupTitle">Group ' + msg.groupId 
+                    + ' Information</h3>');
+            $('#creator').replaceWith('<div class="panel-body" id="creator">' + msg.creator + '</div>');
+            var member_str = "";
+            for (let i = 0; i < msg.members.length; i++) {
+                member_str += '<option>' + msg.members[i] + '</option>';
+            }
+            $('#members').replaceWith('<select multiple class="form-control" id="members" size=8>' + 
+                    member_str + '</select>');
+            var member_str_2 = "";
+            for (let i = 0; i < msg.reservations.length; i++) {
+                member_str_2 += '<option>' + JSON.stringify(msg.reservations[i]) + '</option>';
+            }
+            $('#reservations').replaceWith('<select multiple class="form-control" id="reservations" size=4>' + 
+                    member_str_2 + '</select>');
+        });
+
         $(".btnCheck").click(function(){
             $(".changeAlert").toggleClass("alert-warning");
             $(".changeAlert").toggleClass("alert-success");
