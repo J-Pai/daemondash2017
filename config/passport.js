@@ -25,14 +25,14 @@ module.exports = function(passport) {
             User.findOne({
                 'local.phonenumber': phonenumber
             }, function (err, user) {
+                var pattern = /^\+\d \(\d{3}\) \d{3}-\d{4}$/;
+                var match = pattern.exec(phonenumber);
+                console.log(match);
                 if (err) return done(err);
                 if (user) {
                     console.log('Username exists...');
                     return done(null, false, { message: 'That username is already taken.'});
-                } else if (isNaN(phonenumber)) {
-                    console.log('Phonenumber is NOT a valid phonenumber');
-                    return done(null, false, { message: 'Phone number is invalid.' });
-                } else if (phonenumber.length !== 10){
+                } else if (!match){
                     console.log('Phonenumber is NOT a valid phonenumber');
                     return done(null, false, { message: 'Phone number is invalid.' });
                 }else {
