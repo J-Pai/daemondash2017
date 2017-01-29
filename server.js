@@ -23,6 +23,9 @@ var session = require('express-session');
 // Database Declaration/connection
 mongoose.connect('mongodb://daemondash:Mech*123@ds133249.mlab.com:33249/jpai_mongodb_main');
 mongoose.promise = global.Promise;
+var models = require('./config');
+var User = mongoose.model('User');
+var Classroom = mongoose.model('Classroom');
 
 // Server Configuration
 app.set('port', (process.env.PORT || 3000));
@@ -52,6 +55,12 @@ require('./app/routes.js')(app, passport);
 
 io.on('connection', function(socket) {
     console.log('A user has connected...');
+    socket.on('get building', function(building) {
+    	console.log(building);
+    	Classroom.getClassrooms({building: building}, function(err, rooms) {
+    		io.emit('set rooms', rooms);
+    	})
+    })
 })
 
 http.listen(app.get('port'), function() {

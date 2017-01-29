@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://daemondash:Mech*123@ds133249.mlab.com:33249/jpai_mongodb_main');
-var data = require('./info.json');
+var data = require('./courses.json');
 var _ = require('lodash');
 var models = require('./config');
 var async = require('async');
@@ -68,15 +68,26 @@ _.forEach(data, function(value, key) {
             var end_time = convert_time(loc.end_time);
             var id = loc.building + "-" + loc.room;
             if (id in database) {
-                var obj = {
-                    department: dept,
-                    course: course,
-                    section: section,
-                    days: new_days,
-                    start: start_time,
-                    end: end_time,
-                };
-                database[id].class.push(obj);
+                var exists = false;
+                database[id]['class'].forEach(function(c) {
+                    var days_string = c.days.toString();
+                    var days2_string = new_days.toString();
+                    if (c.course === course && c.start === start_time
+                        && c.end === end_time && days_string === days2_string) {
+                        exists = true;
+                    }
+                });
+                if (!exists) {
+                    var obj = {
+                        department: dept,
+                        course: course,
+                        section: section,
+                        days: new_days,
+                        start: start_time,
+                        end: end_time,
+                    };
+                    database[id].class.push(obj);
+                }
             } else {
                 var obj = {
                     building : loc.building,
