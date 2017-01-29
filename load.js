@@ -24,12 +24,19 @@ function convert_time(time) {
     var min = parseInt(time.substr(0, time.length-2).split(':')[1]);
     var ampm = time.substr('-2');
     var seconds = 0;
-    seconds += hour * 60 * 60;
-    seconds += min * 60
-    if (ampm === "pm") {
-        seconds += 12 * 60 * 60;
+    seconds += min * 60;
+    if (hour === 12) {
+        if (ampm === "pm") {
+            seconds += 12 * 60 * 60;
+        }
+    } else {
+        if (ampm === "pm") {
+            seconds += (hour + 12) * 60 * 60;
+        } else {
+            seconds += hour * 60 * 60;
+        }
     }
-    console.log(seconds);
+    return seconds;
 }
 
 _.forEach(data, function(value, key) {
@@ -57,53 +64,54 @@ _.forEach(data, function(value, key) {
                 end++;
                 start = end;
             }
-            convert_time(loc.start_time);
-            // Classroom.find({
-            //     building: loc.building,
-            //     room: loc.room,
-            // }).count().exec(function(err, result) {                
-            //     if (result !== 0) {
-            //         Classroom.update({
-            //             building: loc.building,
-            //             room: loc.room,
-            //         }, 
-            //         {
-            //             $push: { 
-            //                 class: {
-            //                     department: dept,
-            //                     course: course,
-            //                     section: section,
-            //                     days: new_days,
-            //                     start: loc.start_time,
-            //                     end: loc.end_time,
-            //                 }
-            //             }
-            //         }).exec(function(err) {
-            //             if (err) {
-            //                 console.log(err);
-            //             }
-            //         });
-            //     } else {
-            //         var classroom = Classroom({
-            //             building: loc.building,
-            //             room: loc.room, 
-            //             class: [{
-            //                 department: dept,
-            //                 course: course,
-            //                 section: section,
-            //                 days: new_days,
-            //                 start: loc.start_time,
-            //                 end: loc.end_time,
-            //             }]                    
-            //         });
-            //         classroom.save(function(err) {
-            //             if (err) {
-            //                 console.log(err);
-            //                 console.log(classroom);
-            //             }
-            //         });
-            //     }
-            // });
+            var start_time = convert_time(loc.start_time);
+            var end_time = convert_time(loc.end_time);
+            Classroom.find({
+                building: loc.building,
+                room: loc.room,
+            }).count().exec(function(err, result) {                
+                if (result !== 0) {
+                    Classroom.update({
+                        building: loc.building,
+                        room: loc.room,
+                    }, 
+                    {
+                        $push: { 
+                            class: {
+                                department: dept,
+                                course: course,
+                                section: section,
+                                days: new_days,
+                                start: start_time,
+                                end: end_time,
+                            }
+                        }
+                    }).exec(function(err) {
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
+                } else {
+                    var classroom = Classroom({
+                        building: loc.building,
+                        room: loc.room, 
+                        class: [{
+                            department: dept,
+                            course: course,
+                            section: section,
+                            days: new_days,
+                            start: start_time,
+                            end: end_time,
+                        }]                    
+                    });
+                    classroom.save(function(err) {
+                        if (err) {
+                            console.log(err);
+                            console.log(classroom);
+                        }
+                    });
+                }
+            });
         }
     })
     
