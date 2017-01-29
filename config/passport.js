@@ -18,36 +18,36 @@ module.exports = function(passport) {
 
     passport.use('local-signup', new LocalStrategy({
             usernameField: 'phonenumber',
-            passwordField: 'password'
+            passwordField: 'password',
+            passReqToCallback: true
         },
-        function(phonenumber,password,done) {
-            process.nextTick(function() {
-                User.findOne({
-                    'local.phonenumber': phonenumber
-                }, function (err, user) {
-                    if (err) return done(err);
-                    if (user) {
-                        console.log('Username exists...');
-                        return done(null, false, { message: 'That username is already taken.'});
-                    } else if (isNaN(phonenumber)) {
-                        console.log('Phonenumber is NOT a valid phonenumber');
-                        return done(null, false, { message: 'Phone number is invalid.' });
-                    } else if (phonenumber.length !== 10){
-                        console.log('Phonenumber is NOT a valid phonenumber');
-                        return done(null, false, { message: 'Phone number is invalid.' });
-                    }else {
-                        console.log('Creating new user...');
-                        var newUser = new User();
+        function(req,phonenumber,password,done) {
+            User.findOne({
+                'local.phonenumber': phonenumber
+            }, function (err, user) {
+                var pattern = /^\+\d \(\d{3}\) \d{3}-\d{4}$/;
+                var match = pattern.exec(phonenumber);
+                console.log(match);
+                if (err) return done(err);
+                if (user) {
+                    console.log('Username exists...');
+                    return done(null, false, { message: 'That username is already taken.'});
+                } else if (!match){
+                    console.log('Phonenumber is NOT a valid phonenumber');
+                    return done(null, false, { message: 'Phone number is invalid.' });
+                }else {
+                    console.log('Creating new user...');
+                    var newUser = new User();
 
-                        newUser.local.phonenumber = phonenumber;
-                        newUser.local.password = newUser.generateHash(password);
+                    newUser.local.phonenumber = phonenumber;
+                    newUser.local.password = newUser.generateHash(password);
+                    newUser.name = req.body.name;
 
-                        newUser.save(function(err) {
-                            if (err) return done(err);
-                            return done(null, newUser);
-                        });
-                    }
-                });
+                    newUser.save(function(err) {
+                        if (err) return done(err);
+                        return done(null, newUser);
+                    });
+                }
             });
         }));
 

@@ -3,7 +3,7 @@ mongoose.connect('mongodb://daemondash:Mech*123@ds133249.mlab.com:33249/jpai_mon
 var data = require('./info.json');
 var _ = require('lodash');
 var models = require('./config');
-
+var async = require('async');
 var User = mongoose.model("User");
 var Classroom = mongoose.model("Classroom");
 
@@ -38,7 +38,7 @@ function convert_time(time) {
     }
     return seconds;
 }
-
+var database = {};
 _.forEach(data, function(value, key) {
     var split = key.split('-');
     var dept = split[0].substr(0,4);
@@ -66,54 +66,42 @@ _.forEach(data, function(value, key) {
             }
             var start_time = convert_time(loc.start_time);
             var end_time = convert_time(loc.end_time);
-            Classroom.find({
-                building: loc.building,
-                room: loc.room,
-            }).count().exec(function(err, result) {                
-                if (result !== 0) {
-                    Classroom.update({
-                        building: loc.building,
-                        room: loc.room,
-                    }, 
-                    {
-                        $push: { 
-                            class: {
-                                department: dept,
-                                course: course,
-                                section: section,
-                                days: new_days,
-                                start: start_time,
-                                end: end_time,
-                            }
-                        }
-                    }).exec(function(err) {
-                        if (err) {
-                            console.log(err);
-                        }
-                    });
-                } else {
-                    var classroom = Classroom({
-                        building: loc.building,
-                        room: loc.room, 
-                        class: [{
-                            department: dept,
-                            course: course,
-                            section: section,
-                            days: new_days,
-                            start: start_time,
-                            end: end_time,
-                        }]                    
-                    });
-                    classroom.save(function(err) {
-                        if (err) {
-                            console.log(err);
-                            console.log(classroom);
-                        }
-                    });
+            var id = loc.building + "-" + loc.room;
+            if (id in database) {
+                var obj = {
+                    department: dept,
+                    course: course,
+                    section: section,
+                    days: new_days,
+                    start: start_time,
+                    end: end_time,
+                };
+                database[id].class.push(obj);
+            } else {
+                var obj = {
+                    building : loc.building,
+                    room : loc.room,
+                    class : [{
+                        department : dept,
+                        course : course,
+                        section : section,
+                        days : new_days,
+                        start : start_time,
+                        end : end_time
+                    }]
                 }
-            });
+                database[id] = obj;
+            }
         }
-    })
-    
+    });
 });
+async.each(database, function(d, cb) {
+    var classroom = new Classroom(d);
+    classroom.save(function(err) {
+        cb();
+    })
+}, function(err) {
+    console.log("done");
+    mongoose.connection.close();
+})
 

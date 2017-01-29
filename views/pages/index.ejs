@@ -4,6 +4,8 @@
 <html lang="en" ng-app>
     <head>
         <% include ../partials/head %>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-formhelpers/2.2.0/css/bootstrap-formhelpers.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-formhelpers/2.2.0/js/bootstrap-formhelpers.min.js"></script>
         <link rel="stylesheet" href="/public/css/index.css">
     </head>
     <body>
@@ -45,8 +47,9 @@
                     <form action="/signup" method="post">
                         <div class="form-group">
                             <label for="exampleInputPhone1">Phone number</label>
-                            <input type="text" class="form-control" name="phonenumber"
-                                    id="exampleInputPhone1" placeholder="Phone number">
+                            <input type="text" class="form-control input-medium bfh-phone" 
+                                name="phonenumber" data-format="+1 (ddd) ddd-dddd"
+                                id="exampleInputPhone1">
                         </div>
 
                         <div class="form-group">
@@ -92,8 +95,9 @@
                     <form action="/login" method="post">
                         <div class="form-group">
                             <label for="exampleInputPhone2">Phone number</label>
-                            <input type="text" class="form-control" name="phonenumber" 
-                                    id="exampleInputPhone2" placeholder="Phone number">
+                            <input type="text" class="form-control input-medium bfh-phone" 
+                                name="phonenumber" data-format="+1 (ddd) ddd-dddd"
+                                id="exampleInputPhone2">
                         </div>
 
                         <div class="form-group">

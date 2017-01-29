@@ -2,6 +2,8 @@
  * routes.js
  * Specifies the routes in which the web application utilizes
  */
+var User = require('../app/models/user');
+
 module.exports = function(app, passport) {
     app.get('/', function(req, res) {
         if(req.isAuthenticated())
@@ -11,12 +13,12 @@ module.exports = function(app, passport) {
         }
     });
     
-    app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect: '/home',
-        failureRedirect: '/',
-        failureFlash: true
-    }), function (req, res) {
-        console.log(req.flash());
+    app.post('/signup', function(req, res) {
+        passport.authenticate('local-signup', {
+            successRedirect: '/home',
+            failureRedirect: '/',
+            failureFlash: true
+        })(req,res);
     });
 
     app.post('/login', passport.authenticate('local-login', {
