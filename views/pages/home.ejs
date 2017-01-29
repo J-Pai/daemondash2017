@@ -70,17 +70,19 @@
                 5 : "Saturday",
                 6 : "Sunday"
             };
-            
             io.on('set rooms', function(rooms) {
                 var timetable = new Timetable();
                 timetable.setScope(7,22);
                 var date = new Date();
                 var day = days[date.getDay()];
                 var room_nums = [];
+                //get a list of rooms
                 rooms.forEach(function(room) {
                     room_nums.push(room.room);
                 });
                 timetable.addLocations(room_nums);
+
+                //creates all the time slots;
                 rooms.forEach(function(room) {
                     var total = (22-7) * 12;
                     var b_hour = 7;
@@ -132,6 +134,7 @@
                             timetable.addEvent(lecture.department + lecture.course, room.room, start, end, options1);
                         }
                     });
+
                     _.forEach(free, function(value, key) {
                         var minute = parseInt(key.split(':')[1]);
                         var hour = parseInt(key.split(':')[0]);
@@ -218,10 +221,6 @@
                 data: {
                 }
             }
-
-            // var renderer = new Timetable.Renderer(timetable);
-            //     renderer.draw('.timetable');
-
             //Hide booking detail
             var numOfBooking = 0;
             $(function(){
