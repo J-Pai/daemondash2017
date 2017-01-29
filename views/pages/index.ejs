@@ -7,25 +7,20 @@
         <link rel="stylesheet" href="/public/css/index.css">
     </head>
     <body>
-        <div class="wrapper">
-            <div class="header"> 
-                <% include ../partials/login-header %>
-            </div>
-            <div class="content">
-                <main class="container-fluid">
-                    <% if (message) { %>
-                        <div class="alert alert-danger"><%= message %></div>
-                    <% } %> 
-                    <div class="col-md-12 text-center header-content">
-                        <h1 id="header">ENTER YOUR TEXT HERE.</h1>
-                        <p id="subHeader">Blah blah blah blah blah.</p>
-                        <hr>
-                        <button type="button"
-                                class="btn btn-primary navbar-btn btn-lg customPriBtn" 
-                                data-toggle="modal" data-target="#modal1">
-                                Sign up
-                        </button>       
-
+        <% include ../partials/login-header %>
+        <main class="container-fluid">
+            <% if (message) { %>
+                <div class="alert alert-danger"><%= message %></div>
+            <% } %> 
+            <div class="col-md-12 text-center header-content">
+                <h1 id="header">COME AND CHOOSE YOUR ROOM.</h1>
+                <p id="subHeader">An interactive room reservation service.</p>
+                <hr>
+                <button type="button"
+                        class="btn btn-primary navbar-btn btn-lg customPriBtn" 
+                        data-toggle="modal" data-target="#modal1">
+                        Sign up
+                </button>
                         <button type="button" class="btn btn-default navbar-btn btn-lg"
                                 data-toggle="modal" data-target="#modal2">
                                 Sign in

@@ -26,6 +26,7 @@ mongoose.promise = global.Promise;
 var models = require('./config');
 var User = mongoose.model('User');
 var Classroom = mongoose.model('Classroom');
+var Group = mongoose.model('Group');
 
 // Server Configuration
 app.set('port', (process.env.PORT || 3000));
@@ -55,6 +56,14 @@ require('./app/routes.js')(app, passport);
 
 io.on('connection', function(socket) {
     console.log('A user has connected...');
+    socket.on('group select', function(groupId) {
+        Group.findOne({ groupId: parseInt(groupId.split('_')[1]) },
+            function (err, group) {
+                if (err) throw err;
+                io.emit('change data', group);
+            }
+        );
+    })
     socket.on('get building', function(building) {
     	Classroom.getClassrooms({building: building}, function(err, rooms) {
     		io.emit('set rooms', rooms);
@@ -82,6 +91,7 @@ io.on('connection', function(socket) {
     	});
     });
 });
+
 
 http.listen(app.get('port'), function() {
     console.log("room_phil Live at Port " + app.get('port'));
