@@ -38,7 +38,7 @@ module.exports = function(app, passport) {
     app.get('/link', function(req, res) {
         res.render('pages/link');
     });
-    app.get('/reservations', function(req, res) {
+    app.get('/reservations', isLoggedIn, function(req, res) {
         function convert(num) {
             var date = new Date(null);
             date.setSeconds(num);
