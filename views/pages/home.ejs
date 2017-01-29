@@ -203,7 +203,6 @@
 
                 $("#cancel").click(function(){
                     $('#timetable-detail').empty();
-                    console.log(bookings);
                     bookings.forEach(function(id) {
                         $("#" + id).remove();
                         $('[data-id=' + id + "]").toggleClass('clicked');
@@ -250,7 +249,10 @@
                 else {
                     alert("Invalid choice"); 
                 }
-            })
+            });
+            $('#confirm').click(function() {
+                console.log(bookings);
+            });
         </script>
     </body>
 </html>
