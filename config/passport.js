@@ -16,28 +16,30 @@ module.exports = function(passport) {
         })
     });
 
-    passport.use('local-signup', new LocalStrategy(
-        function(username,password,done) {
-            username = username.toLowerCase();
+    passport.use('local-signup', new LocalStrategy({
+            usernameField: 'phonenumber',
+            passwordField: 'password'
+        },
+        function(phonenumber,password,done) {
             process.nextTick(function() {
                 User.findOne({
-                    'local.username': username
+                    'local.phonenumber': phonenumber
                 }, function (err, user) {
                     if (err) return done(err);
                     if (user) {
                         console.log('Username exists...');
                         return done(null, false, { message: 'That username is already taken.'});
-                    } else if (isNaN(username)) {
-                        console.log('Username is NOT a valid phonenumber');
-                        return done(null, false, { message: 'That username is not a valid phone number' });
-                    } else if (username.length !== 10){
-                        console.log('Username is NOT a valid phonenumber');
-                        return done(null, false, { message: 'That username is not a valid phone number' });
+                    } else if (isNaN(phonenumber)) {
+                        console.log('Phonenumber is NOT a valid phonenumber');
+                        return done(null, false, { message: 'Phone number is invalid.' });
+                    } else if (phonenumber.length !== 10){
+                        console.log('Phonenumber is NOT a valid phonenumber');
+                        return done(null, false, { message: 'Phone number is invalid.' });
                     }else {
                         console.log('Creating new user...');
                         var newUser = new User();
 
-                        newUser.local.username = username;
+                        newUser.local.phonenumber = phonenumber;
                         newUser.local.password = newUser.generateHash(password);
 
                         newUser.save(function(err) {
@@ -49,11 +51,14 @@ module.exports = function(passport) {
             });
         }));
 
-    passport.use('local-login', new LocalStrategy(
-        function(username,password,done) {
-            username = username.toLowerCase();
+    passport.use('local-login', new LocalStrategy({
+            usernameField: 'phonenumber',
+            passwordField: 'password'
+        },
+        function(phonenumber,password,done) {
+            phonenumber = phonenumber.toLowerCase();
             User.findOne({
-                'local.username' : username
+                'local.phonenumber' : phonenumber
             }, function(err, user) {
                 if (err) {
                     return done(err);
