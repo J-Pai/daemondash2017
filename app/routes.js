@@ -12,6 +12,10 @@ module.exports = function(app, passport) {
             res.render('pages/index', { message: req.flash('error')[0] });
         }
     });
+
+    app.get('/about', function(req,res) {
+        res.render('pages/about');
+    });
     
     app.post('/signup', function(req, res) {
         passport.authenticate('local-signup', {
