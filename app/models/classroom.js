@@ -11,12 +11,6 @@ var _ = require('lodash');
 var User = mongoose.model('User');
 mongoose.Promise = global.Promise;
 
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-    console.log("classroom.js model connected to mongodb...");
-});
-
 var ClassroomSchema = new Schema({
     room: {
         type: String,

@@ -7,6 +7,7 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 var Schema = mongoose.Schema;
+var ObjectId = Schema.ObjectId;
 mongoose.Promise = global.Promise;
 
 var userSchema = new Schema({
@@ -22,7 +23,19 @@ var userSchema = new Schema({
     reservations: [{
         room: String,
         building: String
-    }]
+    }],
+    messages: [{
+        from: String,
+        body: String,
+        time_received: Date
+    }],
+    sent_messages: [{
+        from: String,
+        body: String,
+        time_received: Date
+    }],
+    friends: [String],
+    groups: [Number]
 });
 
 userSchema.methods.generateHash = function(password) {

@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="/public/css/custTimetable.css">        
         <link rel="stylesheet" href="/public/timetable.js-master/dist/styles/timetablejs.css">
         <script src="/public/timetable.js-master/dist/scripts/timetable.min.js"></script>
+        <script src="/public/lodash.core.js"></script>
         <script src="/socket.io/socket.io.js"></script>
     </head>
     <body class="container-fluid">
@@ -52,10 +53,101 @@
 
             var io = io();
             var options = [];
+            var days = {
+                0 : "Monday",
+                1 : "Tuesday",
+                2 : "Wednesday",
+                3 : "Thursday",
+                4 : "Friday",
+                5 : "Saturday",
+                6 : "Sunday"
+            };
+            
             io.on('set rooms', function(rooms) {
-                console.log(rooms);
-            });
+                var timetable = new Timetable();
+                timetable.setScope(7,22);
+                var date = new Date();
+                var day = days[date.getDay()];
+                var room_nums = [];
+                rooms.forEach(function(room) {
+                    room_nums.push(room.room);
+                });
+                timetable.addLocations(room_nums);
+                rooms.forEach(function(room) {
+                    var total = (22-7) * 12;
+                    var b_hour = 7;
+                    var b_min = 0;
+                    var free = {};
+                    //makes a hash with all the increments
+                    for(var i = 0; i < total; i++) {
+                        if (b_min === 60) {
+                            b_min = 0;
+                            b_hour += 1;
+                        }
+                        var key = b_hour.toString() + ":" + b_min.toString();
+                        free[key] = 0;
+                        b_min += 5;
+                    }
+                    console.log(free);
+                    room.class.forEach(function(lecture) {
+                        if (lecture.days.indexOf(day) !== -1) {
+                            var date = new Date(null);
+                            date.setSeconds(lecture.start);
+                            var d = date.toISOString().substr(11, 8).split(':');
+                            var s_minute = d[1];
+                            var s_hour = d[0];
 
+                            date = new Date(null);
+                            date.setSeconds(lecture.end);
+                            d = date.toISOString().substr(11, 8).split(':');
+                            var e_minute = d[1];
+                            var e_hour = d[0];
+                            var start = new Date(2017,1,29,s_hour,s_minute);
+                            var end = new Date(2017,1,29,e_hour,e_minute);
+                            var diff = (((end - start)/1000)/60)/5;
+                            s_minute = parseInt(s_minute);
+                            s_hour = parseInt(s_hour);
+                            for (var i = 0; i < diff; i++) {
+                                if (s_minute === 60) {
+                                    s_minute = 0;
+                                    s_hour += 1;
+                                }
+                                var ns_minute = parseInt(s_minute).toString();
+                                var ns_hour = parseInt(s_hour).toString();
+                                var key = ns_hour + ":" + ns_minute;
+                                delete free[key];
+                                s_minute += 5
+                            }
+                            timetable.addEvent(lecture.department + lecture.course, room.room, start, end);
+                        }
+                    });
+                    _.forEach(free, function(value, key) {
+                        var minute = parseInt(key.split(':')[1]);
+                        var plus = key.split(':')[0] + ":" + (minute+15).toString();
+                        if (minute % 15 === 0) {
+                            var options2 = {
+                                class: 'free',
+                            }
+                            var hour = parseInt(key.split(':')[0]);
+                            var nhour = hour;
+                            var nminute = minute + 15;
+                            if (nminute === 60) {
+                                nminute = 0;
+                                nhour += 1;
+                            }
+                            var nstart = new Date(2017,1,29,hour, minute);
+                            var nend = new Date(2017,1,29,nhour, nminute);
+                            console.log(nstart);
+                            console.log(nend);
+                            timetable.addEvent("", room.room, nstart, nend, options2);
+                        }
+
+                    });
+                });
+                var renderer = new Timetable.Renderer(timetable);
+                renderer.draw('.timetable');
+            });
+            //timetable.addLocations(['1','2','3']);
             $.getJSON("/public/json/buildings.json", function(data) {
                 Object.keys(data).forEach(function(building) {
                     options.push("(" + data[building].code + ") " + data[building].name);
@@ -66,11 +158,6 @@
                     $('#building-list').append(option);
                 }
             });
-
-            //New timetable
-            var timetable = new Timetable();
-            timetable.setScope(0, 23);
-            timetable.addLocations (['Room 1', 'Room 2', 'Room 3', 'Room 4', 'Room 5', 'Room 6', 'Room 7', 'Room 8', 'Room 9', 'Room 10', 'Room 11', 'Room 12', 'Room 13', 'Room 23', 'Room 33', 'Room 43', 'Room 53', 'Room 63', 'Room 73', 'Room 83', 'Room 31', 'Room 32', 'Room 35', 'Room 34', 'Room 36', 'Room 37', 'Room 38', 'Room 39', 'Room 389']);
 
             var options1 = {
                 class: 'class',
@@ -108,17 +195,8 @@
                 }
             }
 
-            timetable.addEvent('Class', 'Room 1', 
-                new Date(2015,7,17,10,45), new Date(2015,7,17,12,30), options1);
-            timetable.addEvent('', 'Room 2', 
-                new Date(2015,7,17,10,45), new Date(2015,7,17,11,00), options2);
-            timetable.addEvent('', 'Room 2', 
-                new Date(2015,7,17,11,00), new Date(2015,7,17,11,15), options4);
-            timetable.addEvent('', 'Room 3', 
-                new Date(2015,7,17,10,45), new Date(2015,7,17,12,30), options3); 
-
-            var renderer = new Timetable.Renderer(timetable);
-                renderer.draw('.timetable');
+            // var renderer = new Timetable.Renderer(timetable);
+            //     renderer.draw('.timetable');
 
             //Hide booking detail
             var numOfBooking = 0;
