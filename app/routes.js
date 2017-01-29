@@ -5,6 +5,7 @@
 var User = require('../app/models/user');
 
 module.exports = function(app, passport) {
+    // Page routing
     app.get('/', function(req, res) {
         if(req.isAuthenticated())
             res.redirect('/home');
@@ -16,7 +17,26 @@ module.exports = function(app, passport) {
     app.get('/about', function(req,res) {
         res.render('pages/about');
     });
+
+    app.get('/home', isLoggedIn, function(req, res) {
+        res.render('pages/home', { user: req.user });
+    });
+
+    app.get('/groups', isLoggedIn, function(req, res) {
+        res.render('pages/groups', { user: req.user })
+    });
+
+    app.get('/logout', function(req,res) {
+        req.logout();
+        res.redirect('/')
+    })
+    // Page not found error
+    app.get('/404', function(req,res,next) {
+        // Trigger a 404
+        next();
+    });
     
+    // API
     app.post('/signup', function(req, res) {
         passport.authenticate('local-signup', {
             successRedirect: '/home',
@@ -30,19 +50,13 @@ module.exports = function(app, passport) {
         failureRedirect: '/',
         failureFlash: true
     }));
-
-    app.get('/home', isLoggedIn, function(req, res) {
-        res.render('pages/home', { user: req.user });
-    });
-
-    app.get('/logout', function(req,res) {
-        req.logout();
-        res.redirect('/')
-    })
-    // Page not found error
-    app.get('/404', function(req,res,next) {
-        // Trigger a 404
-        next();
+    
+    app.post('/createGroup', function(req, res) {
+        createGroup({phonenumber: req.user}, function(err,group) {
+            if (err) throw err;
+            console.log(group);
+        });
+        res.end();
     });
 
     app.use(function(req, res, next) {
@@ -50,7 +64,6 @@ module.exports = function(app, passport) {
         res.render('pages/404', {url: req.url});
         return;
     });
-
 }
 
 function isLoggedIn(req, res, next) {
