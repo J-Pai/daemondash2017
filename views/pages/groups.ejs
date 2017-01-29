@@ -1,0 +1,79 @@
+<html lang="en">
+    <head>
+        <% include ../partials/head%>
+        <link rel="stylesheet" href="/public/css/home.css">
+    </head>
+    <body class>
+        <% include ../partials/header %>
+        <div class="container-fluid">
+            <div class="row vertical-aligned">
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3>Current Groups</h3>
+                        </div>
+                        <div class="panel-body">
+                            <button type="button" class="list-group-item">Group 1</button>
+                            <button type="button" class="list-group-item">Group 2</button>
+                            <button type="button" class="list-group-item">Group 3</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3>Group # Information</h3>
+                        </div>
+                        <div class="panel-body">
+                            <form> 
+                                <div class="form-group">
+                                    <label for="creator">Creator</label>
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            Name
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="members">Members</label>
+                                    <select multiple class="form-control" id="members" size=8>
+                                         <option>1</option>
+                                    </select>
+                                </div>
+                                <div class="row">
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-success tn-md">Invite</button>
+                                        <button type="button" class="btn btn-danger tn-md">Remove</button>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-top: 15px">
+                                    <label for="reservation">Reservations</label>
+                                    <select multiple class="form-control" id="members" size=4>
+                                         <option>1</option>
+                                    </select>
+                                </div>
+                                <div class="row">
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-danger tn-md">Remove Reservation</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3>Pending Invitations</h3>
+                        </div>
+                        <div class="panel-body">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% include ../partials/footer %>
+    </body>
+</html>
+
+
