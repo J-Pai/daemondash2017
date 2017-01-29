@@ -34,8 +34,8 @@ var ClassroomSchema = new Schema({
 		course: String,
 		section: String,
 		days: [String],
-		start: String,
-		end: String,
+		start: Number,
+		end: Number,
 	}],
 	reserved: [{
 		user: {
@@ -97,7 +97,7 @@ ClassroomSchema.statics = _.merge(ClassroomSchema.statics, {
 				console.log(err);
 			}
 		});
-	}
+	},
 
 	/**Gets top 3 rooms with longest times to return as a sms
 	 * @param {Object} opts - Parameters for this function 
@@ -105,10 +105,10 @@ ClassroomSchema.statics = _.merge(ClassroomSchema.statics, {
 	 * @param {String} opts.time - current time
 	*/
 	getTop : function(opts, cb) {
-		Classroom.find({
-			building: opts.building,
+		// Classroom.find({
+		// 	building: opts.building,
 			
-		})
+		// })
 	}
 
 });
