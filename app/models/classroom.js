@@ -112,8 +112,10 @@ ClassroomSchema.statics = _.merge(ClassroomSchema.statics, {
     },
 
     getClassrooms : function(opts, cb) {
+        console.log(opts.building);
+        var Classroom = this;
         Classroom.find({
-            building: opts.building
+            'building': opts.building 
         }).sort('room').exec(cb);
     }
 });
