@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="/public/css/custTimetable.css">        
         <link rel="stylesheet" href="/public/timetable.js-master/dist/styles/timetablejs.css">
         <script src="/public/timetable.js-master/dist/scripts/timetable.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
     </head>
     <body class="container-fluid">
         <% include ../partials/header %>
@@ -49,7 +50,12 @@
         </main>
         <% include ../partials/footer %>
         <script>
+            var io = io();
             var options = [];
+            io.on('set rooms', function(rooms) {
+                console.log(rooms);
+            });
+
             $.getJSON("/public/json/buildings.json", function(data) {
                 Object.keys(data).forEach(function(building) {
                     options.push("(" + data[building].code + ") " + data[building].name);
@@ -104,10 +110,14 @@
                 console.log(inputVal);
                 var obj = $("#building-list").find("option[value='"+inputVal+"']");
 
-                if(obj !=null && obj.length>0)
-                    $("#timetable-title").text(inputVal);
-                else
+                if(obj !=null && obj.length>0) {
+                    var code = inputVal.split(' ')[0].slice(1,-1)
+                    $("#timetable-title").text(inputVal); 
+                    io.emit("get building", code);
+                }
+                else {
                     alert("Invalid choice"); 
+                }
             })
         </script>
         <script src="/public/scripts/homeScript.js"></script>
