@@ -60,7 +60,24 @@
         <% include ../partials/footer %>
         <script>
             //Populate .json into datalist
+            document.querySelector('#search-field').addEventListener('keypress', function (e) {
+                var key = e.which || e.keyCode;
+                if (key === 13) { // 13 is enter
+                    var inputVal = $("#search-field").val();
+                    var obj = $("#building-list").find("option[value='"+inputVal+"']");     
 
+                    if(obj !=null && obj.length>0) {
+                        var code = inputVal.split(' ')[0].slice(1,-1)
+                        $("#timetable-title").text(inputVal); 
+                        io.emit("get building", code);
+                        $("#calendar").show();
+                        $(".pageTitle").hide();
+                    }
+                    else {
+                        alert("Invalid choice"); 
+                    }
+                }
+            });
             var io = io();
             var options = [];
             var bookings = [];
