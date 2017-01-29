@@ -8,7 +8,6 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
-var Group = mongoose.model('Group');
 mongoose.Promise = global.Promise;
 
 var userSchema = new Schema({
@@ -35,14 +34,8 @@ var userSchema = new Schema({
         body: String,
         time_received: Date
     }],
-    friends: [{
-        type: ObjectId,
-        ref: 'User'
-    }],
-    groups: [{
-        type: ObjectId,
-        ref: 'Group'
-    }]
+    friends: [String],
+    groups: [Number]
 });
 
 userSchema.methods.generateHash = function(password) {

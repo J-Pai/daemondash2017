@@ -11,27 +11,17 @@ mongoose.Promise = global.Promise;
 
 var groupSchema = new Schema({
     groupId: Number,
-    creator: {
-        type: ObjectId,
-        ref: 'User'
-    }
-    members: [{
-        type: ObjectId,
-        ref: 'User'
-    }],
+    creator: [String], 
+    members: [String],
     invitations: [{
-        user: {
-            type: ObjectId,
-            ref: 'User'
-        },
+        user: String,
         accepted: Boolean
     }]
 });
 
 groupSchema.statics = _.merge(groupSchema.statics, {
-    group.createGroup
 })
 
-var Group = momngoose.model('Group', groupSchema);
+var Group = mongoose.model('Group', groupSchema);
 
 module.exports = Group;
