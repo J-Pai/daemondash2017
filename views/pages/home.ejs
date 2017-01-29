@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="/public/css/custTimetable.css">        
         <link rel="stylesheet" href="/public/timetable.js-master/dist/styles/timetablejs.css">
         <script src="/public/timetable.js-master/dist/scripts/timetable.min.js"></script>
-        <script src="/public/lodash.core.js"></script>
+        <script src="/public/lodash.js"></script>
         <script src="/socket.io/socket.io.js"></script>
     </head>
     <body class="container-fluid">
@@ -23,7 +23,6 @@
                         <label>
                             Search building name here: 
                         </label>
-
                         <div class="input-group input-group-lg search-field">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button" 
@@ -33,7 +32,6 @@
                             </span>
                             <input id="search-field" list="building-list" type="text"        placeholder="Search here..." class="form-control">
                         </div>
-
                         <datalist id="building-list"></datalist>
                     </div>
                     <div class="well" id="calendar">
@@ -46,12 +44,13 @@
                         <h1 class="customTitle">Booking details</h1>
                         <div id="timetable-detail"></div>
                         <button type="button"
-                                class="btn btn-primary navbar-btn btn-lg customPriBtn">
+                                class="btn btn-primary navbar-btn btn-lg customPriBtn"
+                                id="confirm">
                                 Confirm
                         </button>
                         <button type="button"
                                 class="btn btn-defaut navbar-btn btn-lg customSecBtn"
-                                id="cancel-button">
+                                id="cancel">
                                 Cancel
                         </button>
                     </div>
@@ -64,6 +63,7 @@
 
             var io = io();
             var options = [];
+            var bookings = [];
             var days = {
                 0 : "Monday",
                 1 : "Tuesday",
@@ -151,6 +151,12 @@
                         }
 
                         if (minute % 15 === 0) {
+                            var nhour = hour;
+                            var nminute = minute + 15;
+                            if (nminute === 60) {
+                                nminute = 0;
+                                nhour += 1;
+                            }
                             var options2 = {
                                 class: 'free',
                                 data: {
@@ -159,15 +165,8 @@
                                     date: 'January 29, 2017',
                                     time: hour + ":" + newMinute,
                                     day: day,
-                                    id: hour + "" + minute + "" + nhour + "" + nminute,
+                                    id: room.room + "" + hour + "" + minute + "" + nhour + "" + nminute,
                                 }
-                            }
-
-                            var nhour = hour;
-                            var nminute = minute + 15;
-                            if (nminute === 60) {
-                                nminute = 0;
-                                nhour += 1;
                             }
                             var nstart = new Date(2017,1,29,hour, minute);
                             var nend = new Date(2017,1,29,nhour, nminute);
@@ -180,11 +179,13 @@
                 renderer.draw('.timetable');
                 $("span.time-entry.free").click(function(){
                     $(this).toggleClass('clicked'); 
-
                     if ($(this).attr("class").indexOf("clicked") == -1) {
                         $("#" + $(this).attr("data-id")).remove();
-                        numOfBooking--;
-                    }else {
+                        var current = $(this);
+                        _.remove(bookings, function(val) {
+                            return val.id === current.data('id');
+                        });
+                    } else {
                         var detail = document.createElement('p');
                         detail.setAttribute("id", $(this).attr("data-id"));
                         detail.innerHTML = ($(this).attr("data-buildingName") + " " + 
@@ -193,18 +194,23 @@
                         $(this).attr("data-day") + ", " +
                         $(this).attr("data-date"));
                         $("#timetable-detail").append(detail);
-                        numOfBooking++;
+                        bookings.push($(this).data());
                     }   
 
-                    if (numOfBooking == 0) {
+                    if (bookings.length === 0) {
                         $("#booking-detail").hide();                    
                     }else {
                         $("#booking-detail").show();
                     }
                 });
 
-                $("#cancel-button").click(function(){
-
+                $("#cancel").click(function(){
+                    $('#timetable-detail').empty();
+                    bookings.forEach(function(data) {
+                        $("#" + data.id).remove();
+                        $('[data-id=' + data.id + "]").toggleClass('clicked');
+                    })
+                    bookings = [];
                 });
             });
             //timetable.addLocations(['1','2','3']);
@@ -225,7 +231,6 @@
                 }
             }
             //Hide booking detail
-            var numOfBooking = 0;
             $(function(){
                 $("#booking-detail").hide();
             })
@@ -248,7 +253,10 @@
                 else {
                     alert("Invalid choice"); 
                 }
-            })
+            });
+            $('#confirm').click(function() {
+                $.post('/reserve', {data: bookings})
+            });
         </script>
     </body>
 </html>
