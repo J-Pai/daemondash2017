@@ -55,8 +55,8 @@ require('./app/routes.js')(app, passport);
 
 io.on('connection', function(socket) {
     console.log('A user has connected...');
+    console.log(passport.session());
     socket.on('get building', function(building) {
-    	console.log(building);
     	Classroom.getClassrooms({building: building}, function(err, rooms) {
     		io.emit('set rooms', rooms);
     	})
