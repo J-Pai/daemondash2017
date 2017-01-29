@@ -6,14 +6,18 @@ module.exports = function(app, passport) {
     app.get('/', function(req, res) {
         if(req.isAuthenticated())
             res.redirect('/home');
-        else res.render('pages/index', { message: req.flash('message') });
+        else {
+            res.render('pages/index', { message: req.flash('error')[0] });
+        }
     });
     
     app.post('/signup', passport.authenticate('local-signup', {
         successRedirect: '/home',
         failureRedirect: '/',
         failureFlash: true
-    }));
+    }), function (req, res) {
+        console.log(req.flash());
+    });
 
     app.post('/login', passport.authenticate('local-login', {
         successRedirect: '/home',
@@ -46,5 +50,5 @@ module.exports = function(app, passport) {
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
-    res.redirect('/');
+    res.redirect('/', { message: 'Not Logged In!' });
 }

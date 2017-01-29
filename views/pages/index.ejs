@@ -9,6 +9,9 @@
     <body>
       <% include ../partials/login-header %>
       <main class="container-fluid">
+        <% if (message) { %>
+            <div class="alert alert-danger"><%= message %></div>
+        <% } %> 
         <div class="col-md-12 text-center header-content">
           <h1 id="header">ENTER YOUR TEXT HERE.</h1>
           <p id="subHeader">Blah blah blah blah blah.</p>

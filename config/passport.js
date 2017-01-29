@@ -26,15 +26,13 @@ module.exports = function(passport) {
                     if (err) return done(err);
                     if (user) {
                         console.log('Username exists...')
-                        return done(null,false, { 'message': 'That username is already taken.'});
+                        return done(null, false, { message: 'That username is already taken.'});
                     } else {
                         console.log('Creating new user...')
                         var newUser = new User();
 
                         newUser.local.username = username;
                         newUser.local.password = newUser.generateHash(password);
-
-                        console.log(newUser.local.username)
 
                         newUser.save(function(err) {
                             if (err) return done(err);
@@ -59,7 +57,7 @@ module.exports = function(passport) {
                     return done(null, false, { message: 'No user found.'});
                 }
                 if (!user.validPassword(password)) {
-                    console.log('Incorrect password');
+                    console.log('Incorrect password...');
                     return done(null, false, { message: 'Wrong Password.'});
                 }
                 return done(null, user);
