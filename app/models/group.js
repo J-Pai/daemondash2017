@@ -14,10 +14,7 @@ var groupSchema = new Schema({
         type: Number,
         required: true
     },
-    creator: {
-        type: Number,
-        required: true
-    }, 
+    creator: String, 
     members: [String],
     invitations: [String],
     reservations: [{
@@ -50,6 +47,11 @@ groupSchema.statics = _.merge(groupSchema.statics, {
             newGroup.groupId = next_id;
             newGroup.save(cb);
         });
+    },
+    deleteGroup: function(opts, cb) {
+        Group.findOne({
+            groupId: opts.groupId
+        }).remove(cb);
     },
     invite: function(opts, cb) {
         Group.findOne({

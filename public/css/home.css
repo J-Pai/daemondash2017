@@ -1,6 +1,6 @@
 /*BOOTSTRAP OVERRIDE*/
 html {
-    overflow-y: hidden;
+
 }
 /*Navbar*/
 .customNavBar {
@@ -23,6 +23,7 @@ html {
 .customPriBtn {
     background-color: #BA0000;
     border-color: #BA0000;
+    margin: 8px 15px 8px 0px;
 }
 
 .customPriBtn:hover, 
@@ -40,7 +41,8 @@ html {
 
 .customSecBtn {
     background-color: #FFF;
-    border-color: #FFF;    
+    border-color: #FFF;
+    margin: 8px 15px 8px 0px;  
 }
 
 .customSecBtn:hover, 
@@ -119,6 +121,10 @@ footer {
     color: #900000;
     font-weight: bold;
 }
+.customTitleNoPad {
+    color: #900000;
+    font-weight: bold;
+}
 
 #timetable-detail {
     font-size: 30px;
@@ -135,4 +141,13 @@ footer {
     bottom: 0;
     left: 0;
     width: 100%;
+}
+
+.pageTitle {
+    position: absolute;
+    color: #EFEFEF;
+    text-transform: uppercase;
+    font-weight: lighter;
+    font-size: 175px;
+    padding-left: 50px;
 }
