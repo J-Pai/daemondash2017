@@ -73,7 +73,7 @@
 }
 .timetable section header li {
     display: inline-block;
-    font-size: 1rem;
+    font-size: 2rem;
     overflow: visible;
     width: 0;
     line-height: 46px;

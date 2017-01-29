@@ -38,7 +38,7 @@
                         <div class="timetable pre-scrollable"></div>
                     </div>
                     <div class="well" id="booking-detail"> 
-                        <h2 class="customTitle">Booking details</h2>
+                        <h1 class="customTitle">Booking details</h1>
                         <div id="timetable-detail"></div>
                     </div>
                 </div>
@@ -120,12 +120,19 @@
                     });
                     _.forEach(free, function(value, key) {
                         var minute = parseInt(key.split(':')[1]);
+                        var hour = parseInt(key.split(':')[0]);
                         var plus = key.split(':')[0] + ":" + (minute+15).toString();
                         if (minute % 15 === 0) {
                             var options2 = {
                                 class: 'free',
+                                data: {
+                                    room: room.room,
+                                    date: 'January 29, 2017',
+                                    time: hour + ":" + minute,
+                                    id: hour + "" + minute + "" + nhour + "" + nminute,
+                                }
                             }
-                            var hour = parseInt(key.split(':')[0]);
+
                             var nhour = hour;
                             var nminute = minute + 15;
                             if (nminute === 60) {
@@ -151,6 +158,7 @@
                         var detail = document.createElement('p');
                         detail.setAttribute("id", $(this).attr("data-id"));
                         detail.innerHTML = ($(this).attr("data-room") + " " + 
+                        $(this).attr("data-time") + ", " +
                         $(this).attr("data-date"));
                         $("#timetable-detail").append(detail);
                         numOfBooking++;
@@ -177,27 +185,11 @@
 
             var options1 = {
                 class: 'class',
-                data: {
-
-                }
-            }
-
-            var options2 = {
-
-                url: '#',
-                class: 'free',
-                data: {
-                    room: 'Room 2',
-                    date: '2015/7/17',
-                    time: '10:45am - 11:00am',
-                    id: 10451100,
-                }
             }
 
             var options3 = {
                 class: 'taken',
                 data: {
-                    id: 4,
                 }
             }
 
