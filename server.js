@@ -21,7 +21,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 
 // Database Declaration/connection
-mongoose.connect('mongodb://daemondash:Mech*123@ds133249.mlab.com:33249/jpai_mongodb_main');
+mongoose.connect('');
 mongoose.promise = global.Promise;
 var models = require('./config');
 var User = mongoose.model('User');
